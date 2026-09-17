@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Card Concepts — Auto Dispatch</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #eceae3;
+    color: #1a1a1a;
+    padding: 48px;
+  }
+
+  .concept-block { margin-bottom: 56px; }
+
+  .concept-label {
+    font-size: 12px; font-weight: 700; color: #999;
+    text-transform: uppercase; letter-spacing: 0.6px;
+    margin-bottom: 14px;
+  }
+
+  .row { display: flex; gap: 20px; flex-wrap: wrap; }
+
+  /* ============ shared card bits ============ */
+  .card {
+    width: 260px;
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .name { font-size: 15px; font-weight: 700; }
+  .status-row { display: flex; align-items: center; gap: 6px; font-size: 12.5px; margin-top: 2px; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #22b573; transition: background 0.2s; }
+  .card.offline .status-dot { background: #b7b1a1; }
+  .status-text { color: #22b573; transition: color 0.2s; }
+  .card.offline .status-text { color: #999; }
+
+  .thread-label { display: flex; justify-content: space-between; font-size: 12px; color: #888; margin-bottom: 6px; }
+  .thread-track { height: 6px; border-radius: 3px; background: #efece3; overflow: hidden; }
+  .thread-fill { height: 100%; border-radius: 3px; background: #22b573; transition: background 0.2s; }
+  .card.offline .thread-fill { background: #b7b1a1; }
+
+  .dispatch-row { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; }
+  .dispatch-label { font-size: 12.5px; font-weight: 600; color: #444; }
+
+  .toggle { width: 34px; height: 19px; border-radius: 10px; position: relative; flex-shrink: 0; cursor: pointer; background: #d9d2c2; transition: background 0.2s; }
+  .toggle.on { background: #22b573; }
+  .toggle::after {
+    content: ''; position: absolute; width: 15px; height: 15px;
+    background: white; border-radius: 50%; top: 2px; left: 2px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+    transition: transform 0.2s;
+  }
+  .toggle.on::after { transform: translateX(15px); }
+
+  /* ============ Concept A: halo avatar ============ */
+  .cardA { box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.05); }
+  .avatar-wrap { position: relative; width: 60px; height: 60px; margin-bottom: 14px; }
+  .halo {
+    position: absolute; inset: -14px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(34,181,115,0.55) 0%, rgba(34,181,115,0.0) 70%);
+    filter: blur(6px);
+    transition: opacity 0.3s;
+  }
+  .cardA.offline .halo { opacity: 0; }
+  .avatar {
+    position: relative; width: 60px; height: 60px; border-radius: 50%;
+    background: #d7ece5; color: #14805e;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 16px;
+    box-shadow: 0 0 0 3px #fff;
+  }
+  .cardA.offline .avatar { background: #eee; color: #999; }
+
+  /* ============ Concept B: ambient top glow ============ */
+  .cardB { border: 1px solid #eee; }
+  .glow-top {
+    position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+    width: 220px; height: 140px;
+    background: radial-gradient(ellipse at center, rgba(34,181,115,0.45) 0%, rgba(34,181,115,0) 72%);
+    filter: blur(10px);
+    transition: opacity 0.3s;
+  }
+  .cardB.offline .glow-top { opacity: 0; }
+  .cardB .inner { position: relative; }
+  .cardB .avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: #d7ece5; color: #14805e;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px; margin-bottom: 12px;
+  }
+  .cardB.offline .avatar { background: #eee; color: #999; }
+  .cardB .top-ring {
+    position: absolute; top: -20px; left: -20px; right: -20px; height: 4px;
+    background: linear-gradient(90deg, transparent, #22b573, transparent);
+    filter: blur(2px);
+    transition: opacity 0.3s;
+  }
+  .cardB.offline .top-ring { opacity: 0; }
+</style>
+</head>
+<body>
+
+  <div class="concept-block">
+    <div class="concept-label">Concept A — halo avatar</div>
+    <div class="row">
+      <div class="card cardA">
+        <div class="avatar-wrap"><div class="halo"></div><div class="avatar">AH</div></div>
+        <div class="name">Amira Hassan</div>
+        <div class="status-row"><span class="status-dot"></span><span class="status-text">Available</span></div>
+        <div style="margin-top:16px;">
+          <div class="thread-label"><span>Active threads</span><span>6 / 10</span></div>
+          <div class="thread-track"><div class="thread-fill" style="width:60%;"></div></div>
+        </div>
+        <div class="dispatch-row">
+          <span class="dispatch-label">Available for dispatch</span>
+          <div class="toggle on" onclick="flipCard(this)"></div>
+        </div>
+      </div>
+
+      <div class="card cardA offline">
+        <div class="avatar-wrap"><div class="halo"></div><div class="avatar">BT</div></div>
+        <div class="name">Blake Torres</div>
+        <div class="status-row"><span class="status-dot"></span><span class="status-text">Unavailable</span></div>
+        <div style="margin-top:16px;">
+          <div class="thread-label"><span>Active threads</span><span>3 / 10</span></div>
+          <div class="thread-track"><div class="thread-fill" style="width:30%;"></div></div>
+        </div>
+        <div class="dispatch-row">
+          <span class="dispatch-label">Available for dispatch</span>
+          <div class="toggle" onclick="flipCard(this)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-block">
+    <div class="concept-label">Concept B — ambient top glow + hairline edge</div>
+    <div class="row">
+      <div class="card cardB">
+        <div class="glow-top"></div>
+        <div class="top-ring"></div>
+        <div class="inner">
+          <div class="avatar">CD</div>
+          <div class="name">Celeste Duval</div>
+          <div class="status-row"><span class="status-dot"></span><span class="status-text">Available</span></div>
+          <div style="margin-top:16px;">
+            <div class="thread-label"><span>Active threads</span><span>8 / 10</span></div>
+            <div class="thread-track"><div class="thread-fill" style="width:80%;"></div></div>
+          </div>
+          <div class="dispatch-row">
+            <span class="dispatch-label">Available for dispatch</span>
+            <div class="toggle on" onclick="flipCard(this)"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card cardB offline">
+        <div class="glow-top"></div>
+        <div class="top-ring"></div>
+        <div class="inner">
+          <div class="avatar">DB</div>
+          <div class="name">Dario Bianchi</div>
+          <div class="status-row"><span class="status-dot"></span><span class="status-text">Unavailable</span></div>
+          <div style="margin-top:16px;">
+            <div class="thread-label"><span>Active threads</span><span>0 / 10</span></div>
+            <div class="thread-track"><div class="thread-fill" style="width:0%;"></div></div>
+          </div>
+          <div class="dispatch-row">
+            <span class="dispatch-label">Available for dispatch</span>
+            <div class="toggle" onclick="flipCard(this)"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  function flipCard(toggleEl) {
+    const card = toggleEl.closest('.card');
+    toggleEl.classList.toggle('on');
+    card.classList.toggle('offline');
+
+    const available = !card.classList.contains('offline');
+    card.querySelector('.status-text').textContent = available ? 'Available' : 'Unavailable';
+  }
+</script>
+</body>
+</html>

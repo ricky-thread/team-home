@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Left Nav Mockup</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #dce6f0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .nav {
+      width: 240px;
+      background: #f5efe6;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    /* ── Scrollable body ── */
+    .nav-body {
+      flex: 1;
+      padding: 14px 12px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    /* Logo row */
+    .workspace-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 6px 10px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-circle {
+      width: 26px;
+      height: 26px;
+      background: #e03a2f;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .logo-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1a1a1a;
+      letter-spacing: 0.5px;
+    }
+
+    .icon-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #888;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 5px;
+    }
+
+    .icon-btn:hover { background: rgba(0,0,0,0.06); color: #444; }
+
+    /* Workspace selector */
+    .workspace-selector {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0 6px 12px;
+      font-size: 13px;
+      color: #555;
+      cursor: pointer;
+    }
+
+    /* New Thread button */
+    .new-thread-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      background: #2bac8a;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 8px;
+    }
+
+    /* Nav items */
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 13.5px;
+      color: #2a2a2a;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .nav-item:hover { background: rgba(0,0,0,0.05); }
+    .nav-item.active { background: rgba(0,0,0,0.07); font-weight: 500; }
+
+    .nav-item .nav-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      color: #666;
+    }
+
+    .nav-item .label { flex: 1; }
+
+    .nav-item .badge {
+      font-size: 11.5px;
+      color: #999;
+      background: rgba(0,0,0,0.06);
+      padding: 1px 6px;
+      border-radius: 10px;
+    }
+
+    /* Section headers */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 8px 4px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #999;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+    .section-header .add-btn {
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #aaa;
+    }
+
+    .section-header .add-btn:hover { background: rgba(0,0,0,0.07); color: #555; }
+
+    /* Team items */
+    .team-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-size: 13.5px;
+      color: #2a2a2a;
+      cursor: pointer;
+    }
+
+    .team-item:hover { background: rgba(0,0,0,0.05); }
+
+    .team-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .sub-items {
+      margin-left: 18px;
+      border-left: 1.5px solid #e0d8cc;
+      padding-left: 2px;
+    }
+
+    .sub-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #444;
+      cursor: pointer;
+    }
+
+    .sub-item:hover { background: rgba(0,0,0,0.05); }
+
+    /* ── Footer ── */
+    .nav-footer {
+      border-top: 1px solid #e8e0d4;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .footer-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 6px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .footer-row:hover { background: rgba(0,0,0,0.05); }
+
+    .footer-row .f-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      color: #666;
+    }
+
+    .footer-row .label {
+      flex: 1;
+      font-size: 13.5px;
+      color: #2a2a2a;
+    }
+
+    /* Toggle */
+    .toggle {
+      width: 36px;
+      height: 20px;
+      background: #d0c8bc;
+      border-radius: 10px;
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+
+    .toggle.on { background: #2bac8a; }
+
+    .toggle::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .toggle.on::after { transform: translateX(16px); }
+
+    /* Green ticket button */
+    .get-next-btn {
+      width: 32px;
+      height: 32px;
+      background: #2bac8a;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(43,172,138,0.4);
+    }
+
+    .get-next-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* User row */
+    .user-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: #c9a882;
+    }
+
+    .user-avatar svg { width: 100%; height: 100%; }
+
+    /* Admin / Help row */
+    .admin-help-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 6px 2px;
+    }
+
+    .admin-btn, .help-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #666;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 6px;
+    }
+
+    .admin-btn svg, .help-btn svg { width: 14px; height: 14px; }
+
+    .admin-btn:hover, .help-btn:hover { background: rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+<nav class="nav">
+
+  <!-- ── Scrollable body ── -->
+  <div class="nav-body">
+
+    <!-- Logo + hamburger -->
+    <div class="workspace-row">
+      <div class="logo">
+        <div class="logo-circle">A</div>
+        <span class="logo-text">ACME</span>
+      </div>
+      <!-- Heroicons: bars-3 -->
+      <div class="icon-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Workspace selector -->
+    <div class="workspace-selector">
+      Workspace
+      <!-- Heroicons: chevron-down -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>
+      </svg>
+    </div>
+
+    <!-- New Thread -->
+    <button class="new-thread-btn">
+      <!-- Heroicons: plus -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+      </svg>
+      New Thread
+    </button>
+
+    <!-- My Inbox — Heroicons: inbox -->
+    <div class="nav-item active">
+      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H6.911a2.25 2.25 0 0 0-2.15 1.588L2.1 13.177a2.25 2.25 0 0 0-.1.661Z"/>
+      </svg>
+      <span class="label">My Inbox</span>
+      <span class="badge">{{#}}</span>
+    </div>
+
+    <!-- Mentions — Heroicons: at-symbol -->
+    <div class="nav-item">
+      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25"/>
+      </svg>
+      <span class="label">Mentions</span>
+      <span class="badge">{{#}}</span>
+    </div>
+
+    <!-- Planner — Heroicons: calendar-days -->
+    <div class="nav-item">
+      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/>
+      </svg>
+      <span class="label">Planner</span>
+    </div>
+
+    <!-- Clients — Heroicons: user-group -->
+    <div class="nav-item">
+      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"/>
+      </svg>
+      <span class="label">Clients</span>
+    </div>
+
+    <!-- My Drafts — Heroicons: pencil-square -->
+    <div class="nav-item">
+      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/>
+      </svg>
+      <span class="label">My Drafts</span>
+      <span class="badge">{{#}}</span>
+    </div>
+
+    <!-- TEAMS -->
+    <div class="section-header">
+      Teams
+      <div class="add-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="team-item">
+      <div class="team-dot" style="background:#e03a2f;"></div>
+      <span>Team Red</span>
+    </div>
+    <div class="sub-items">
+      <div class="sub-item">
+        <span style="font-size:13px">🧵</span>
+        <span style="flex:1">All threads</span>
+        <span class="badge">{{#}}</span>
+      </div>
+      <div class="sub-item">
+        <span style="font-size:13px">🔥</span>
+        <span style="flex:1">Urgent</span>
+        <span class="badge">{{#}}</span>
+      </div>
+    </div>
+
+    <div class="team-item">
+      <div class="team-dot" style="background:#3b82f6;"></div>
+      <span>Team Blue</span>
+    </div>
+
+    <div class="team-item">
+      <div class="team-dot" style="background:#22c55e;"></div>
+      <span>Team Green</span>
+    </div>
+
+    <!-- VIEWS -->
+    <div class="section-header">
+      Views
+      <div class="add-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="nav-item"><span style="font-size:13px">🧵</span><span class="label">{{view name}}</span><span class="badge">{{#}}</span></div>
+    <div class="nav-item"><span style="font-size:13px">🧵</span><span class="label">{{view name}}</span><span class="badge">{{#}}</span></div>
+    <div class="nav-item"><span style="font-size:13px">🧵</span><span class="label">{{view name}}</span><span class="badge">{{#}}</span></div>
+    <div class="nav-item"><span style="font-size:13px">🧵</span><span class="label">{{view name}}</span><span class="badge">{{#}}</span></div>
+    <div class="nav-item"><span style="font-size:13px">🧵</span><span class="label">{{view name}}</span><span class="badge">{{#}}</span></div>
+    <div class="nav-item"><span style="font-size:13px">🧵</span><span class="label">{{view name}}</span><span class="badge">{{#}}</span></div>
+    <div class="nav-item"><span style="font-size:13px">🧵</span><span class="label">{{view name}}</span><span class="badge">{{#}}</span></div>
+
+    <!-- APPS -->
+    <div class="section-header">Apps</div>
+
+  </div>
+
+  <!-- ── Footer ── -->
+  <div class="nav-footer">
+
+    <!-- Super Magic — Heroicons: bolt -->
+    <div class="footer-row">
+      <svg class="f-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"/>
+      </svg>
+      <span class="label">Super Magic</span>
+      <div class="toggle" id="superMagicToggle" onclick="this.classList.toggle('on')"></div>
+    </div>
+
+    <!-- Get next thread — Heroicons: ticket -->
+    <div class="footer-row">
+      <svg class="f-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75a3 3 0 0 1 0 10.5v.75a.75.75 0 0 1-.75.75H4.5a.75.75 0 0 1-.75-.75v-.75a3 3 0 0 1 0-10.5V6A.75.75 0 0 1 4.5 5.25h11.25a.75.75 0 0 1 .75.75Z"/>
+      </svg>
+      <span class="label">Get next thread</span>
+      <!-- Heroicons: ticket (white, inside green circle) -->
+      <button class="get-next-btn" id="getNextBtn">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="1.8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75a3 3 0 0 1 0 10.5v.75a.75.75 0 0 1-.75.75H4.5a.75.75 0 0 1-.75-.75v-.75a3 3 0 0 1 0-10.5V6A.75.75 0 0 1 4.5 5.25h11.25a.75.75 0 0 1 .75.75Z"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Thomas Jensen -->
+    <div class="footer-row">
+      <div class="user-avatar">
+        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="28" height="28" fill="#c9a882"/>
+          <circle cx="14" cy="11" r="5" fill="#8b6040"/>
+          <path d="M4 26c0-5.5 4.5-10 10-10s10 4.5 10 10" fill="#8b6040"/>
+        </svg>
+      </div>
+      <span class="label">Thomas Jensen</span>
+      <!-- Heroicons: chevron-down -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="#888" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>
+      </svg>
+    </div>
+
+    <!-- Admin / Help -->
+    <div class="admin-help-row">
+      <!-- Admin — Heroicons: cog-6-tooth -->
+      <div class="admin-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+        </svg>
+        Admin
+      </div>
+      <!-- Help — Heroicons: question-mark-circle -->
+      <div class="help-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"/>
+        </svg>
+        Help
+      </div>
+    </div>
+
+  </div>
+</nav>
+</body>
+</html>
