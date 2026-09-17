@@ -1,537 +1,1674 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Left Nav Mockup</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Team Dispatch — Auto Dispatch Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  button, select, input, textarea { font-family: inherit; }
 
-    body {
-      background: #dce6f0;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 40px;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #FAF9F6;
+    color: #161618;
+    min-height: 100vh;
+  }
 
-    .nav {
-      width: 240px;
-      background: #f5efe6;
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
+  .app { display: flex; min-height: 100vh; }
 
-    /* ── Scrollable body ── */
-    .nav-body {
-      flex: 1;
-      padding: 14px 12px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
+  /* ────────────────────────────── ICON RAIL ────────────────────────────── */
+  .icon-rail {
+    width: 64px;
+    background: linear-gradient(180deg, #00705C 0%, #4CAF8A 55%, #6FC8A5 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 0;
+    gap: 4px;
+    flex-shrink: 0;
+  }
 
-    /* Logo row */
-    .workspace-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 4px 6px 10px;
-    }
+  .rail-user {
+    margin-top: auto;
+    position: relative;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .rail-user img {
+    width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+    display: block; box-shadow: 0 0 0 2px rgba(255,255,255,0.4);
+  }
+  .rail-user .rail-user-dot {
+    position: absolute; bottom: -1px; right: -1px;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #22C55E; border: 2px solid #00705C;
+  }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+  .rail-logo {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: #fff;
+    color: #0e3b2e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: -0.5px;
+    margin-bottom: 18px;
+  }
 
-    .logo-circle {
-      width: 26px;
-      height: 26px;
-      background: #e03a2f;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: -1px;
-    }
+  .rail-item {
+    width: 48px;
+    padding: 8px 0 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    color: rgba(255,255,255,0.55);
+    cursor: pointer;
+    position: relative;
+    font-size: 10.5px;
+    font-weight: 500;
+  }
 
-    .logo-text {
-      font-size: 15px;
-      font-weight: 700;
-      color: #1a1a1a;
-      letter-spacing: 0.5px;
-    }
+  .rail-item svg { width: 20px; height: 20px; }
+  .rail-item:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.85); }
+  .rail-item.active { background: rgba(255,255,255,0.14); color: #fff; }
 
-    .icon-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #888;
-      cursor: pointer;
-      padding: 4px;
-      border-radius: 5px;
-    }
+  .rail-badge {
+    position: absolute;
+    top: 2px;
+    right: 6px;
+    background: #ee6699;
+    color: white;
+    font-size: 9.5px;
+    font-weight: 700;
+    min-width: 15px;
+    height: 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3px;
+  }
 
-    .icon-btn:hover { background: rgba(0,0,0,0.06); color: #444; }
+  /* ────────────────────────────── SIDE PANEL ────────────────────────────── */
+  .side-panel {
+    width: 280px;
+    background: #FAF9F6;
+    border-right: 1px solid #DAD9DD;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
 
-    /* Workspace selector */
-    .workspace-selector {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      padding: 0 6px 12px;
-      font-size: 13px;
-      color: #555;
-      cursor: pointer;
-    }
+  .side-body { padding: 16px 12px; display: flex; flex-direction: column; gap: 2px; }
 
-    /* New Thread button */
-    .new-thread-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      background: #2bac8a;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 9px 16px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      width: 100%;
-      margin-bottom: 8px;
-    }
+  .workspace-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 6px 14px;
+  }
 
-    /* Nav items */
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      padding: 6px 8px;
-      border-radius: 6px;
-      font-size: 13.5px;
-      color: #2a2a2a;
-      cursor: pointer;
-      user-select: none;
-    }
+  .workspace-name { font-size: 15px; font-weight: 700; color: #161618; }
 
-    .nav-item:hover { background: rgba(0,0,0,0.05); }
-    .nav-item.active { background: rgba(0,0,0,0.07); font-weight: 500; }
+  .icon-btn {
+    display: flex; align-items: center; justify-content: center;
+    color: #999; cursor: pointer; padding: 4px; border-radius: 5px;
+  }
+  .icon-btn:hover { background: rgba(0,0,0,0.06); color: #444; }
 
-    .nav-item .nav-icon {
-      width: 16px;
-      height: 16px;
-      flex-shrink: 0;
-      color: #666;
-    }
+  .nav-item {
+    display: flex; align-items: center; gap: 9px;
+    padding: 7px 8px; border-radius: 6px;
+    font-size: 13.5px; color: #2a2a2a; cursor: pointer; user-select: none;
+  }
+  .nav-item:hover { background: rgba(0,0,0,0.05); }
+  .nav-item .nav-icon { width: 16px; height: 16px; flex-shrink: 0; color: #666; }
+  .nav-item .label { flex: 1; color: #605F68; }
+  .nav-item .badge {
+    font-size: 11.5px; color: #605F68; background: rgba(0,0,0,0.06);
+    padding: 1px 6px; border-radius: 10px;
+  }
 
-    .nav-item .label { flex: 1; }
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 8px 4px; font-size: 11px; font-weight: 700;
+    color: #7E7D86; letter-spacing: 0.6px; text-transform: uppercase;
+  }
 
-    .nav-item .badge {
-      font-size: 11.5px;
-      color: #999;
-      background: rgba(0,0,0,0.06);
-      padding: 1px 6px;
-      border-radius: 10px;
-    }
+  .team-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 8px; border-radius: 6px;
+    font-size: 13.5px; color: #605F68; cursor: pointer;
+  }
+  .team-item:hover { background: rgba(0,0,0,0.05); }
+  .team-item.active { background: rgba(229, 228, 224, 0.65); font-weight: 600; }
+  .team-item .chev { width: 12px; height: 12px; color: #999; transition: transform 0.15s; flex-shrink: 0; }
+  .team-item.expanded .chev { transform: rotate(90deg); }
+  .team-item .t-icon { font-size: 13px; width: 16px; text-align: center; flex-shrink: 0; }
+  .team-item .label { flex: 1; }
 
-    /* Section headers */
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 8px 4px;
-      font-size: 11px;
-      font-weight: 600;
-      color: #999;
-      letter-spacing: 0.6px;
-      text-transform: uppercase;
-    }
+  .sub-items {
+    margin-left: 13px; border-left: 1px solid #DAD9DD; padding-left: 4px;
+    display: flex; flex-direction: column; gap: 1px;
+  }
 
-    .section-header .add-btn {
-      width: 18px;
-      height: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 4px;
-      cursor: pointer;
-      color: #aaa;
-    }
+  .sub-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 8px; border-radius: 6px;
+    font-size: 13px; color: #4a4436; cursor: pointer;
+  }
+  .sub-item:hover { background: rgba(0,0,0,0.05); }
+  .sub-item.selected { background: rgba(229, 228, 224, 0.65); font-weight: 600; color: #161618; }
+  .sub-item.selected:hover { background: rgba(229, 228, 224, 0.65); }
+  .sub-item .s-icon { font-size: 12px; width: 14px; text-align: center; flex-shrink: 0; }
+  .sub-item .s-icon svg { width: 14px; height: 14px; display: block; color: #605F68; }
+  .sub-item .label { flex: 1; color: #605F68; }
+  .sub-item.selected .label { color: #161618; }
+  .sub-item .badge {
+    font-size: 11px; color: #605F68; background: rgba(0,0,0,0.06);
+    padding: 1px 6px; border-radius: 10px;
+  }
 
-    .section-header .add-btn:hover { background: rgba(0,0,0,0.07); color: #555; }
+  /* ────────────────────────────── MAIN CONTENT ────────────────────────────── */
+  .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 
-    /* Team items */
-    .team-item {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      padding: 5px 8px;
-      border-radius: 6px;
-      font-size: 13.5px;
-      color: #2a2a2a;
-      cursor: pointer;
-    }
+  .page-topbar {
+    height: 44px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px;
+    border-bottom: 1px solid #DAD9DD;
+  }
+  .page-topbar-left { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .page-topbar .badge-icon { font-size: 15px; flex-shrink: 0; }
+  .page-topbar .page-title {
+    font-size: 14px; font-weight: 600; color: #161618;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .page-topbar .topbar-menu-btn {
+    all: unset; display: flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px; border-radius: 6px;
+    color: #7E7D86; cursor: pointer; flex-shrink: 0;
+  }
+  .page-topbar .topbar-menu-btn:hover { background: rgba(0,0,0,0.05); }
+  .page-topbar .topbar-menu-btn svg { width: 16px; height: 16px; }
 
-    .team-item:hover { background: rgba(0,0,0,0.05); }
+  .page-tabs {
+    display: flex; align-items: center; gap: 4px;
+    padding: 10px 24px;
+    margin-top: 12px;
+  }
+  .page-tab {
+    all: unset; box-sizing: border-box; cursor: pointer;
+    font-size: 13px; font-weight: 500; color: #7E7D86;
+    padding: 5px 12px; border-radius: 12px;
+    border: 1px solid transparent;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .page-tab:hover { background: rgba(0,0,0,0.04); }
+  .page-tab.active { color: #161618; background: rgba(0,0,0,0.04); }
 
-    .team-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
+  .page-body { padding: 32px 24px 40px; }
+  .page-body[hidden] { display: none; }
 
-    .sub-items {
-      margin-left: 18px;
-      border-left: 1.5px solid #e0d8cc;
-      padding-left: 2px;
-    }
+  .insights-wrap { max-width: 720px; margin: 0 auto; }
+  .insights-card {
+    background: #fff; border-radius: 12px; padding: 24px;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    margin-top: 18px;
+  }
+  .insights-header {
+    display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+    font-size: 14px; color: #161618; margin-bottom: 28px;
+  }
+  .insights-header .insights-total { font-size: 22px; font-weight: 700; }
+  .insights-select {
+    border: 1px solid #DAD9DD; border-radius: 8px; padding: 6px 10px;
+    font-size: 13px; color: #161618; background: #fff;
+  }
+  .insights-sep { color: #DAD9DD; margin: 0 4px; }
 
-    .sub-item {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      padding: 5px 8px;
-      border-radius: 6px;
-      font-size: 13px;
-      color: #444;
-      cursor: pointer;
-    }
+  .insights-plot { position: relative; height: 240px; padding-left: 36px; margin-bottom: 8px; }
+  .insights-gridline { position: absolute; left: 36px; right: 0; border-top: 1px solid #EDEDEE; }
+  .insights-gridline .glabel {
+    position: absolute; left: -36px; top: -7px; width: 28px;
+    text-align: right; font-size: 11px; color: #7E7D86;
+  }
+  .insights-bars { position: absolute; left: 36px; right: 0; top: 0; bottom: 0; display: flex; }
+  .insights-bar-col { flex: 1; display: flex; justify-content: center; align-items: flex-end; height: 100%; }
+  .insights-bar { width: 28px; border-radius: 2px 2px 0 0; }
 
-    .sub-item:hover { background: rgba(0,0,0,0.05); }
+  .insights-xlabels { display: flex; padding-left: 36px; }
+  .insights-bar-col-label { flex: 1; text-align: center; font-size: 12px; color: #605F68; }
 
-    /* ── Footer ── */
-    .nav-footer {
-      border-top: 1px solid #e8e0d4;
-      padding: 10px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
+  .insights-table { width: 100%; border-collapse: collapse; margin-top: 24px; font-size: 13.5px; }
+  .insights-table th {
+    text-align: left; background: #FAF9F6; color: #605F68; font-weight: 600;
+    padding: 10px 12px; border-bottom: 1px solid #DAD9DD;
+  }
+  .insights-table td { padding: 10px 12px; border-bottom: 1px solid #DAD9DD; color: #161618; }
+  .insights-table tr:last-child td { border-bottom: none; }
+  .insights-swatch {
+    display: inline-block; width: 10px; height: 10px; border-radius: 2px;
+    margin-right: 8px; vertical-align: middle;
+  }
 
-    .footer-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 7px 6px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+  .insights-footnote { margin-top: 16px; font-size: 12px; color: #7E7D86; }
 
-    .footer-row:hover { background: rgba(0,0,0,0.05); }
+  .summary-bar {
+    display: flex;
+    gap: 12px;
+    margin: 18px 0 52px;
+  }
+  .summary-block {
+    position: relative;
+    flex: 1;
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.18);
+  }
+  .summary-top { display: flex; align-items: center; justify-content: space-between; }
+  .summary-icon {
+    width: 20px; height: 20px;
+    color: #605F68;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .summary-icon svg { width: 20px; height: 20px; }
+  .summary-block .num { font-size: 22px; font-weight: 600; color: #161618; }
+  .summary-block .lbl { font-size: 13px; color: #7E7D86; }
 
-    .footer-row .f-icon {
-      width: 16px;
-      height: 16px;
-      flex-shrink: 0;
-      color: #666;
-    }
+  h2.section-title {
+    font-size: 16px; font-weight: 600; color: #161618;
+    margin-bottom: 0;
+  }
 
-    .footer-row .label {
-      flex: 1;
-      font-size: 13.5px;
-      color: #2a2a2a;
-    }
+  .content { max-width: 1080px; margin: 0 auto; }
 
-    /* Toggle */
-    .toggle {
-      width: 36px;
-      height: 20px;
-      background: #d0c8bc;
-      border-radius: 10px;
-      position: relative;
-      cursor: pointer;
-      flex-shrink: 0;
-      transition: background 0.2s;
-    }
+  .members-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
 
-    .toggle.on { background: #2bac8a; }
+  .bulk-actions { display: flex; gap: 8px; }
 
-    .toggle::after {
-      content: '';
-      position: absolute;
-      width: 16px;
-      height: 16px;
-      background: white;
-      border-radius: 50%;
-      top: 2px;
-      left: 2px;
-      transition: transform 0.2s;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    }
+  .ghost-btn {
+    background: transparent;
+    border: 1px solid #00BB99;
+    color: #00805F;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .ghost-btn:hover { background: rgba(0,187,153,0.08); }
 
-    .toggle.on::after { transform: translateX(16px); }
+  .sort-select {
+    background: #fff;
+    border: 1px solid #ece6d8;
+    color: #605F68;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 6px 28px 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 24 24' stroke='%23999' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+  }
+  .sort-select:hover { border-color: #d8d0bf; }
 
-    /* Green ticket button */
-    .get-next-btn {
-      width: 32px;
-      height: 32px;
-      background: #2bac8a;
-      border-radius: 50%;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      box-shadow: 0 2px 6px rgba(43,172,138,0.4);
-    }
+  .members-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+  .members-grid[hidden], .members-table-wrap[hidden] { display: none; }
 
-    .get-next-btn svg {
-      width: 16px;
-      height: 16px;
-    }
+  .member-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.18);
+  }
 
-    /* User row */
-    .user-avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      overflow: hidden;
-      flex-shrink: 0;
-      background: #c9a882;
-    }
+  .glow-top {
+    position: absolute; top: -140px; left: 50%;
+    transform: translateX(-50%) scale(0.92);
+    width: 260px; height: 170px;
+    background: radial-gradient(ellipse at center, rgba(0, 187, 153, 0.35) 0%, rgba(153, 238, 153, 0.18) 72%, rgba(153, 238, 153, 0) 100%);
+    filter: blur(10px);
+    opacity: 0;
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+  }
+  .member-card.available .glow-top { opacity: 1; transform: translateX(-50%) scale(1); }
 
-    .user-avatar svg { width: 100%; height: 100%; }
+  .member-head { display: flex; align-items: center; gap: 12px; position: relative; }
 
-    /* Admin / Help row */
-    .admin-help-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 6px 6px 2px;
-    }
+  .avatar-wrap { position: relative; width: 44px; height: 44px; flex-shrink: 0; }
 
-    .admin-btn, .help-btn {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 13px;
-      color: #666;
-      cursor: pointer;
-      padding: 4px 6px;
-      border-radius: 6px;
-    }
+  .avatar {
+    position: relative; width: 44px; height: 44px; border-radius: 50%;
+    object-fit: cover; display: block;
+    box-shadow: 0 0 0 3px #fff;
+    filter: grayscale(0.85) opacity(0.75);
+    transition: filter 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .member-card.available .avatar { filter: none; }
 
-    .admin-btn svg, .help-btn svg { width: 14px; height: 14px; }
+  .status-dot {
+    position: absolute; bottom: 0; right: 0;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: #B3B2B8;
+    border: 2px solid #fff;
+    transition: background 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .member-card.available .status-dot { background: #219653; }
 
-    .admin-btn:hover, .help-btn:hover { background: rgba(0,0,0,0.05); }
-  </style>
+  .member-info { display: flex; flex-direction: column; gap: 2px; }
+  .member-name { font-size: 14.5px; font-weight: 600; color: #161618; }
+  .member-role { font-size: 12.5px; color: #7E7D86; }
+
+  .threads-row { position: relative; margin-top: 4px; padding-top: 14px; border-top: 1px solid #DAD9DD; }
+  .thread-label {
+    display: flex; justify-content: space-between; font-size: 13px; color: #605F68;
+    margin: 0 -8px 6px; padding: 6px 8px; border-radius: 8px;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .thread-label:hover { background: rgba(0,0,0,0.05); }
+  .thread-label .count { font-weight: 500; color: #161618; }
+  .thread-track { height: 6px; border-radius: 3px; background: #efece3; overflow: hidden; position: relative; }
+  .member-card .thread-track { display: none; }
+  .member-card .thread-label { margin-bottom: 0; }
+  .thread-fill {
+    position: absolute; inset: 0; border-radius: 3px;
+    background: #C6C5CA;
+  }
+  .member-card.available .thread-fill,
+  .member-modal.available .thread-fill {
+    background: linear-gradient(90deg, #00BB99 0%, #B5D93C 60%, #F2A93C 100%);
+  }
+  .thread-mask {
+    position: absolute; top: 0; right: 0; height: 100%;
+    background: #E3E3E5;
+    transition: width 0.2s;
+  }
+
+  .chat-row {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; color: #605F68;
+    margin: -8px -8px 0; padding: 6px 8px; border-radius: 8px;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .chat-row:hover { background: rgba(0,0,0,0.05); }
+  .chat-row .count { font-weight: 500; color: #161618; }
+
+  .voice-row {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; color: #605F68;
+    margin: -8px -8px 0; padding: 6px 8px; border-radius: 8px;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .voice-row:hover { background: rgba(0,0,0,0.05); }
+  /* Badge size variants — reusable across pill-style badges */
+  .badge-16 { height: 16px; display: inline-flex; align-items: center; padding: 0 8px; border-radius: 6px; font-size: 11px; font-weight: 700; box-sizing: border-box; }
+  .badge-20 { height: 20px; display: inline-flex; align-items: center; padding: 0 6px; border-radius: 8px; font-size: 12px; font-weight: 700; box-sizing: border-box; }
+
+  .voice-pill { font-weight: 500; }
+  .voice-pill.in-progress { background: #E6FAF6; color: #00967A; }
+  .voice-pill.idle { background: #FAF9F6; color: #5F5E5A; }
+
+  .dispatch-row {
+    display: flex; align-items: center; justify-content: space-between;
+    position: relative;
+    margin: -8px -8px 0; padding: 6px 8px;
+  }
+  .dispatch-label { font-size: 13px; font-weight: 400; color: #605F68; }
+
+  .toggle {
+    all: unset;
+    display: inline-block;
+    width: 38px; height: 21px; background: #E3E3E5;
+    border-radius: 11px; position: relative; cursor: pointer;
+    flex-shrink: 0; transition: background-color 0.15s ease;
+  }
+  .toggle[data-state="checked"] { background: #00BB99; }
+  .toggle::after {
+    content: ''; position: absolute; width: 17px; height: 17px;
+    background: white; border-radius: 50%; top: 2px; left: 2px;
+    transition: transform 0.15s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  }
+  .toggle[data-state="checked"]::after { transform: translateX(17px); }
+  .toggle[disabled] { cursor: not-allowed; opacity: 0.5; }
+  .toggle:focus-visible { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #00BB99; }
+
+  .tooltip-wrap { position: relative; display: inline-flex; }
+  .tooltip-wrap[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 130%; right: 0;
+    background: #161618;
+    color: #fff;
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 5px 9px;
+    border-radius: 6px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .tooltip-wrap[data-tooltip]:hover::before {
+    content: '';
+    position: absolute;
+    bottom: 118%; right: 9px;
+    border: 5px solid transparent;
+    border-top-color: #161618;
+    pointer-events: none;
+  }
+
+  .dispatch-label.excluded { color: #7E7D86; }
+
+  .info-icon-wrap { position: relative; display: inline-flex; cursor: help; }
+  .info-icon-wrap svg { width: 14px; height: 14px; color: #7E7D86; }
+  .info-icon-wrap:hover::after {
+    content: attr(data-tooltip);
+    position: absolute; top: 130%; left: 50%; transform: translateX(-50%);
+    width: 200px;
+    background: #161618; color: #fff;
+    font-size: 11.5px; font-weight: 500; line-height: 1.4; text-align: center;
+    padding: 7px 10px; border-radius: 6px;
+    white-space: normal;
+    z-index: 20;
+  }
+  .info-icon-wrap:hover::before {
+    content: '';
+    position: absolute; top: 118%; left: 50%; transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-bottom-color: #161618;
+  }
+
+  /* ────────────────────────────── MEMBER MODAL ────────────────────────────── */
+  .modal-overlay {
+    width: 0; flex-shrink: 0;
+    overflow: hidden;
+    transition: width 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .modal-overlay.open { width: 440px; }
+
+  .member-modal {
+    position: relative;
+    width: 440px; height: 100%;
+    background: #fff;
+    padding: 24px 24px 0;
+    border-left: 1px solid #DAD9DD;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .modal-scroll-area {
+    flex: 1; overflow-y: auto;
+    background: #FAF9F6;
+    margin: 0 -24px; padding: 20px 24px 24px;
+  }
+  .modal-card {
+    background: #fff; border-radius: 12px; padding: 16px 18px;
+    margin-bottom: 12px;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  }
+  .modal-card:last-child { margin-bottom: 0; }
+  .modal-close {
+    all: unset; position: absolute; top: 16px; right: 16px;
+    width: 28px; height: 28px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: #7E7D86; cursor: pointer;
+  }
+  .modal-close:hover { background: rgba(0,0,0,0.05); }
+  .modal-close svg { width: 16px; height: 16px; }
+
+  .modal-header { display: flex; align-items: center; gap: 14px; margin-bottom: 34px; padding-right: 28px; }
+  .modal-avatar-wrap { position: relative; width: 56px; height: 56px; flex-shrink: 0; }
+  .modal-avatar {
+    width: 56px; height: 56px; border-radius: 50%; object-fit: cover; display: block;
+    filter: grayscale(0.85) opacity(0.75);
+  }
+  .member-modal.available .modal-avatar { filter: none; }
+  .modal-status-dot {
+    position: absolute; bottom: 0; right: 0;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: #B3B2B8; border: 2px solid #fff;
+  }
+  .member-modal.available .modal-status-dot { background: #219653; }
+  .modal-name { font-size: 17px; font-weight: 700; color: #161618; }
+  .modal-role { font-size: 13px; color: #7E7D86; margin-top: 2px; }
+
+
+  .modal-stat-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; color: #605F68; margin-bottom: 8px; }
+  .modal-stat-row .modal-stat-value { font-weight: 600; color: #161618; }
+
+  .modal-info-row { display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: #161618; margin-bottom: 12px; }
+  .modal-info-row:last-of-type { margin-bottom: 0; }
+  .modal-info-row svg { width: 16px; height: 16px; color: #7E7D86; flex-shrink: 0; }
+  .modal-info-row a { color: #00805F; text-decoration: none; }
+  .modal-info-row a:hover { text-decoration: underline; }
+
+  .modal-card-title { font-size: 12.5px; font-weight: 600; color: #605F68; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 12px; }
+
+  .modal-section-title {
+    font-size: 14px; font-weight: 600; color: #161618;
+    margin: 4px 2px 10px;
+  }
+  .modal-section-title:not(:first-child) { margin-top: 32px; }
+
+  .dispatch-log { display: flex; flex-direction: column; }
+  .dispatch-log-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 0; border-bottom: 1px solid #DAD9DD;
+    font-size: 12.5px;
+  }
+  .dispatch-log-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .dispatch-log-row:first-child { padding-top: 0; }
+  .dispatch-log-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: #B3B2B8; }
+  .dispatch-log-dot.on { background: #219653; }
+  .dispatch-log-text { flex: 1; color: #605F68; }
+  .dispatch-log-text strong { color: #161618; font-weight: 600; }
+  .dispatch-log-time { color: #605F68; white-space: nowrap; }
+
+  .modal-tabs { display: flex; gap: 20px; border-bottom: 1px solid #DAD9DD; margin: 0 -24px; padding: 0 24px; }
+  .modal-tab {
+    all: unset; cursor: pointer;
+    padding: 0 0 10px; margin-bottom: -1px;
+    font-size: 13.5px; font-weight: 600; color: #7E7D86;
+    border-bottom: 2px solid transparent;
+  }
+  .modal-tab.active { color: #161618; border-bottom-color: #00BB99; }
+  .modal-tab-panel[hidden] { display: none; }
+
+  .modal-thread-list { display: flex; flex-direction: column; }
+  .modal-thread-row {
+    display: flex; flex-direction: column; gap: 6px;
+    margin: 0 -18px; padding: 10px 18px; border-bottom: 1px solid #DAD9DD;
+    font-size: 13px; color: #161618;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .modal-thread-row:hover { background: rgba(0, 0, 0, 0.035); }
+  .modal-thread-row:first-child { margin-top: -16px; padding-top: 16px; }
+  .modal-thread-row:last-child { margin-bottom: -16px; padding-bottom: 16px; border-bottom: none; }
+  .modal-thread-row.modal-thread-empty { margin: 0; padding: 0; cursor: default; color: #605F68; }
+  .modal-thread-row.modal-thread-empty:hover { background: none; }
+
+  .status-pill { font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 6px; }
+  .status-pill.status-assigned,
+  .status-pill.status-in-progress { background: #E6F1FB; color: #0C447C; }
+  .modal-thread-status { display: flex; align-items: center; gap: 8px; }
+
+  .modal-thread-top { display: flex; align-items: center; gap: 8px; }
+  .modal-thread-top .status-pill { margin-left: auto; }
+  .thread-priority-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+  .modal-thread-id { font-weight: 600; }
+
+  .modal-thread-summary {
+    font-size: 13px; font-weight: 600; color: #161618;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  .modal-thread-meta {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 5px;
+    font-size: 11.5px; color: #605F68;
+  }
+  .modal-thread-meta .meta-dot { color: #B3B2B8; }
+
+  .meta-tooltip { position: relative; cursor: default; }
+  .meta-tooltip:hover::after {
+    content: attr(data-tooltip);
+    position: absolute; top: 130%; left: 0;
+    background: #161618; color: #fff;
+    font-size: 11.5px; font-weight: 500;
+    padding: 5px 9px; border-radius: 6px;
+    white-space: nowrap; pointer-events: none; z-index: 20;
+  }
+  .meta-tooltip:hover::before {
+    content: '';
+    position: absolute; top: 118%; left: 8px;
+    border: 5px solid transparent;
+    border-bottom-color: #161618;
+    pointer-events: none;
+  }
+  .modal-thread-contact { display: flex; align-items: center; gap: 6px; }
+  .thread-contact-avatar {
+    width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 700;
+  }
+
+  .modal-calls-table { width: 100%; border-collapse: collapse; }
+  .modal-calls-table td {
+    padding: 12px 0; border-bottom: 1px solid #DAD9DD;
+    font-size: 13px; color: #161618;
+  }
+  .modal-calls-table tr:last-child td { border-bottom: none; }
+  .modal-date-row td {
+    font-size: 11px; font-weight: 700; color: #7E7D86;
+    text-transform: uppercase; letter-spacing: 0.4px;
+    padding: 22px 0 6px; border-bottom: none;
+  }
+  .modal-date-row:first-child td { padding-top: 8px; }
+
+  /* ────────────────────────────── VIEW TOGGLE ────────────────────────────── */
+  .view-toggle {
+    display: flex;
+    border: 1px solid #ece6d8;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .view-btn {
+    all: unset;
+    display: flex; align-items: center; justify-content: center;
+    width: 32px; height: 30px;
+    cursor: pointer;
+    color: #7E7D86;
+    background: #fff;
+  }
+  .view-btn svg { width: 15px; height: 15px; }
+  .view-btn + .view-btn { border-left: 1px solid #ece6d8; }
+  .view-btn.active { background: #F1EFE8; color: #161618; }
+  .view-btn:hover:not(.active) { background: rgba(0,0,0,0.03); }
+
+  /* ────────────────────────────── TABLE VIEW ────────────────────────────── */
+  .members-table-wrap {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.18);
+  }
+
+  .table-search {
+    width: 100%; max-width: 320px;
+    border: 1px solid #E2E2E2; border-radius: 8px;
+    padding: 8px 12px 8px 34px;
+    font-size: 13.5px; color: #161618;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 24 24' stroke='%23B3B2B8' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m21 21-4.34-4.34M19 11a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    margin-bottom: 16px;
+    outline: none;
+  }
+  .table-search:focus { border-color: #00BB99; box-shadow: 0 0 0 3px rgba(0,187,153,0.2); }
+  .table-search::placeholder { color: #B3B2B8; }
+
+  table.members-table { width: 100%; border-collapse: collapse; }
+  .members-table thead th {
+    text-align: left; font-size: 12.5px; font-weight: 600; color: #7E7D86;
+    padding: 0 12px 10px; border-bottom: 1px solid #DAD9DD;
+  }
+  .members-table tbody td {
+    padding: 14px 12px; border-bottom: 1px solid #DAD9DD; font-size: 13.5px; vertical-align: middle;
+  }
+  .members-table tbody tr:last-child td { border-bottom: none; }
+  .row-clickable { cursor: pointer; transition: background 0.15s; }
+  .row-clickable:hover { background: rgba(0,0,0,0.03); }
+
+  .row-name { display: flex; align-items: center; gap: 10px; }
+  .row-name span { font-weight: 600; }
+  .row-avatar-wrap { position: relative; width: 36px; height: 36px; flex-shrink: 0; }
+  .row-avatar {
+    width: 36px; height: 36px; border-radius: 50%; object-fit: cover; display: block;
+    filter: grayscale(0.85) opacity(0.75);
+    transition: filter 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  tr.available .row-avatar { filter: none; }
+  .row-status-dot {
+    position: absolute; bottom: -1px; right: -1px;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #B3B2B8; border: 2px solid #fff;
+    transition: background 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  tr.available .row-status-dot { background: #219653; }
+
+  .role-pill { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 6px; }
+  .role-pill.role-admin { background: #E1F5EE; color: #00805F; }
+  .role-pill.role-team-admin { background: #E6F1FB; color: #0C447C; }
+  .role-pill.role-member { background: #FAF9F6; color: #5F5E5A; }
+
+  .threads-cell.over { color: #E24B4A; font-weight: 700; }
+
+  .sync-footer {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: 16px; padding-top: 16px; border-top: 1px solid #DAD9DD;
+    font-size: 12.5px; color: #7E7D86;
+  }
+  .sync-footer[hidden] { display: none; }
+  .sync-footer .sync-btn {
+    all: unset; box-sizing: border-box;
+    display: flex; align-items: center; gap: 5px;
+    height: 24px; padding: 0 10px;
+    border: 1px solid #ece6d8; border-radius: 6px;
+    cursor: pointer; color: #605F68; font-weight: 600; font-size: 12px;
+    transition: background 0.15s;
+  }
+  .sync-footer .sync-btn:hover { background: rgba(0,0,0,0.03); }
+  .sync-footer .sync-btn svg { width: 13px; height: 13px; }
+</style>
 </head>
 <body>
-<nav class="nav">
+<div class="app">
 
-  <!-- ── Scrollable body ── -->
-  <div class="nav-body">
+  <!-- ─────────────────── ICON RAIL ─────────────────── -->
+  <nav class="icon-rail">
+    <div class="rail-logo">IP</div>
 
-    <!-- Logo + hamburger -->
-    <div class="workspace-row">
-      <div class="logo">
-        <div class="logo-circle">A</div>
-        <span class="logo-text">ACME</span>
-      </div>
-      <!-- Heroicons: bars-3 -->
-      <div class="icon-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
-        </svg>
-      </div>
+    <div class="rail-item">
+      <!-- Heroicons: sparkles -->
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z"/>
+      </svg>
+      Magic
     </div>
 
-    <!-- Workspace selector -->
-    <div class="workspace-selector">
-      Workspace
-      <!-- Heroicons: chevron-down -->
-      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>
-      </svg>
-    </div>
-
-    <!-- New Thread -->
-    <button class="new-thread-btn">
-      <!-- Heroicons: plus -->
-      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
-      </svg>
-      New Thread
-    </button>
-
-    <!-- My Inbox — Heroicons: inbox -->
-    <div class="nav-item active">
-      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
+    <div class="rail-item active" style="position:relative;">
+      <span class="rail-badge">26</span>
+      <!-- Heroicons: inbox -->
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H6.911a2.25 2.25 0 0 0-2.15 1.588L2.1 13.177a2.25 2.25 0 0 0-.1.661Z"/>
       </svg>
-      <span class="label">My Inbox</span>
-      <span class="badge">{{#}}</span>
+      Inbox
     </div>
 
-    <!-- Mentions — Heroicons: at-symbol -->
-    <div class="nav-item">
-      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25"/>
-      </svg>
-      <span class="label">Mentions</span>
-      <span class="badge">{{#}}</span>
-    </div>
-
-    <!-- Planner — Heroicons: calendar-days -->
-    <div class="nav-item">
-      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
+    <div class="rail-item">
+      <!-- Heroicons: calendar-days -->
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
         <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/>
       </svg>
-      <span class="label">Planner</span>
+      Planner
     </div>
 
-    <!-- Clients — Heroicons: user-group -->
-    <div class="nav-item">
-      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
+    <div class="rail-item">
+      <!-- Heroicons: user-group -->
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
         <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"/>
       </svg>
-      <span class="label">Clients</span>
+      Contacts
     </div>
 
-    <!-- My Drafts — Heroicons: pencil-square -->
-    <div class="nav-item">
-      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
-        <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/>
+    <div class="rail-item">
+      <!-- Heroicons: computer-desktop -->
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25"/>
       </svg>
-      <span class="label">My Drafts</span>
-      <span class="badge">{{#}}</span>
+      Configs
     </div>
 
-    <!-- TEAMS -->
-    <div class="section-header">
-      Teams
-      <div class="add-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+    <div class="rail-user">
+      <img src="https://i.pravatar.cc/150?img=12" alt="Your profile" />
+      <div class="rail-user-dot"></div>
+    </div>
+  </nav>
+
+  <!-- ─────────────────── SIDE PANEL ─────────────────── -->
+  <aside class="side-panel">
+    <div class="side-body">
+
+      <div class="workspace-row">
+        <span class="workspace-name">ACME</span>
+        <div class="icon-btn">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15 7.5 7.5-7.5 7.5" transform="rotate(180 12 12)"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="nav-item">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H6.911a2.25 2.25 0 0 0-2.15 1.588L2.1 13.177a2.25 2.25 0 0 0-.1.661Z"/>
         </svg>
+        <span class="label">My Inbox</span>
+        <span class="badge">20</span>
       </div>
-    </div>
-
-    <div class="team-item">
-      <div class="team-dot" style="background:#e03a2f;"></div>
-      <span>Team Red</span>
-    </div>
-    <div class="sub-items">
-      <div class="sub-item">
-        <span style="font-size:13px">🧵</span>
-        <span style="flex:1">All threads</span>
-        <span class="badge">{{#}}</span>
-      </div>
-      <div class="sub-item">
-        <span style="font-size:13px">🔥</span>
-        <span style="flex:1">Urgent</span>
-        <span class="badge">{{#}}</span>
-      </div>
-    </div>
-
-    <div class="team-item">
-      <div class="team-dot" style="background:#3b82f6;"></div>
-      <span>Team Blue</span>
-    </div>
-
-    <div class="team-item">
-      <div class="team-dot" style="background:#22c55e;"></div>
-      <span>Team Green</span>
-    </div>
-
-    <!-- VIEWS -->
-    <div class="section-header">
-      Views
-      <div class="add-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+      <div class="nav-item">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25"/>
         </svg>
+        <span class="label">Mentions</span>
+        <span class="badge">5</span>
       </div>
+      <div class="nav-item">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/>
+        </svg>
+        <span class="label">My Drafts</span>
+        <span class="badge">2</span>
+      </div>
+      <div class="nav-item">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m6-2a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/>
+        </svg>
+        <span class="label">Timer</span>
+        <span class="badge">1</span>
+      </div>
+      <div class="nav-item">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/>
+        </svg>
+        <span class="label">Approvals</span>
+        <span class="badge">6</span>
+      </div>
+
+      <!-- TEAMS -->
+      <div class="section-header">
+        Teams
+        <div class="icon-btn">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="team-item expanded" onclick="toggleTeam(this)">
+        <svg class="chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
+        <span class="t-icon">🛡️</span>
+        <span class="label">Team one</span>
+      </div>
+      <div class="sub-items">
+        <div class="sub-item selected">
+          <span class="s-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+          </span>
+          <span class="label">Home</span>
+        </div>
+        <div class="sub-item"><span class="s-icon">🧵</span><span class="label">All threads</span><span class="badge">20</span></div>
+        <div class="sub-item"><span class="s-icon">🔥</span><span class="label">Triage</span><span class="badge">4</span></div>
+        <div class="sub-item"><span class="s-icon">🚧</span><span class="label">In progress</span><span class="badge">12</span></div>
+        <div class="sub-item"><span class="s-icon">⏳</span><span class="label">Waiting on us</span><span class="badge">6</span></div>
+        <div class="sub-item"><span class="s-icon">⏳</span><span class="label">Waiting on them</span><span class="badge">16</span></div>
+        <div class="sub-item"><span class="s-icon">⏸️</span><span class="label">On hold</span><span class="badge">7</span></div>
+        <div class="sub-item"><span class="s-icon">🎯</span><span class="label">Completed QA</span><span class="badge">6</span></div>
+      </div>
+
+      <div class="team-item" onclick="toggleTeam(this)">
+        <svg class="chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
+        <span class="t-icon">✂️</span>
+        <span class="label">Team two</span>
+      </div>
+      <div class="team-item" onclick="toggleTeam(this)">
+        <svg class="chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
+        <span class="t-icon">🕴️</span>
+        <span class="label">Team three</span>
+      </div>
+
+      <!-- VIEWS -->
+      <div class="section-header">
+        Views
+        <div class="icon-btn">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+          </svg>
+        </div>
+      </div>
+      <div class="nav-item"><span style="font-size:13px">🧵</span><span class="label">All threads</span><span class="badge">44</span></div>
+      <div class="nav-item"><span style="font-size:13px">🔥</span><span class="label">Triage</span><span class="badge">8</span></div>
+      <div class="nav-item"><span style="font-size:13px">🚧</span><span class="label">In progress</span><span class="badge">28</span></div>
+      <div class="nav-item"><span style="font-size:13px">⏳</span><span class="label">Waiting on us</span><span class="badge">7</span></div>
+      <div class="nav-item"><span style="font-size:13px">⏳</span><span class="label">Waiting on them</span><span class="badge">12</span></div>
+      <div class="nav-item"><span style="font-size:13px">⏸️</span><span class="label">On hold</span><span class="badge">6</span></div>
+      <div class="nav-item"><span style="font-size:13px">🎯</span><span class="label">Completed QA</span><span class="badge">52</span></div>
+
     </div>
+  </aside>
 
-    <div class="nav-item"><span style="font-size:13px">🧵</span><span class="label">{{view name}}</span><span class="badge">{{#}}</span></div>
-    <div class="nav-item"><span style="font-size:13px">🧵</span><span class="label">{{view name}}</span><span class="badge">{{#}}</span></div>
-    <div class="nav-item"><span style="font-size:13px">🧵</span><span class="label">{{view name}}</span><span class="badge">{{#}}</span></div>
-    <div class="nav-item"><span style="font-size:13px">🧵</span><span class="label">{{view name}}</span><span class="badge">{{#}}</span></div>
-    <div class="nav-item"><span style="font-size:13px">🧵</span><span class="label">{{view name}}</span><span class="badge">{{#}}</span></div>
-    <div class="nav-item"><span style="font-size:13px">🧵</span><span class="label">{{view name}}</span><span class="badge">{{#}}</span></div>
-    <div class="nav-item"><span style="font-size:13px">🧵</span><span class="label">{{view name}}</span><span class="badge">{{#}}</span></div>
-
-    <!-- APPS -->
-    <div class="section-header">Apps</div>
-
-  </div>
-
-  <!-- ── Footer ── -->
-  <div class="nav-footer">
-
-    <!-- Super Magic — Heroicons: bolt -->
-    <div class="footer-row">
-      <svg class="f-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
-        <path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"/>
-      </svg>
-      <span class="label">Super Magic</span>
-      <div class="toggle" id="superMagicToggle" onclick="this.classList.toggle('on')"></div>
-    </div>
-
-    <!-- Get next thread — Heroicons: ticket -->
-    <div class="footer-row">
-      <svg class="f-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75a3 3 0 0 1 0 10.5v.75a.75.75 0 0 1-.75.75H4.5a.75.75 0 0 1-.75-.75v-.75a3 3 0 0 1 0-10.5V6A.75.75 0 0 1 4.5 5.25h11.25a.75.75 0 0 1 .75.75Z"/>
-      </svg>
-      <span class="label">Get next thread</span>
-      <!-- Heroicons: ticket (white, inside green circle) -->
-      <button class="get-next-btn" id="getNextBtn">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="1.8">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75a3 3 0 0 1 0 10.5v.75a.75.75 0 0 1-.75.75H4.5a.75.75 0 0 1-.75-.75v-.75a3 3 0 0 1 0-10.5V6A.75.75 0 0 1 4.5 5.25h11.25a.75.75 0 0 1 .75.75Z"/>
+  <!-- ─────────────────── MAIN CONTENT ─────────────────── -->
+  <main class="main">
+    <div class="page-topbar">
+      <div class="page-topbar-left">
+        <span class="badge-icon">🛡️</span>
+        <span class="page-title">Team one</span>
+      </div>
+      <button type="button" class="topbar-menu-btn" aria-label="More options">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75h.007v.008H12V6.75Zm0 5.25h.007v.008H12V12Zm0 5.25h.007v.008H12v-.008Z"/>
         </svg>
       </button>
     </div>
-
-    <!-- Thomas Jensen -->
-    <div class="footer-row">
-      <div class="user-avatar">
-        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="28" height="28" fill="#c9a882"/>
-          <circle cx="14" cy="11" r="5" fill="#8b6040"/>
-          <path d="M4 26c0-5.5 4.5-10 10-10s10 4.5 10 10" fill="#8b6040"/>
-        </svg>
+    <div class="page-tabs">
+      <button type="button" class="page-tab active" id="pageTabBtnHome" onclick="setPage('home')">Home</button>
+      <button type="button" class="page-tab" id="pageTabBtnInsights" onclick="setPage('insights')">Insights</button>
+    </div>
+    <div class="page-body" id="homePage">
+    <div class="content">
+      <h2 class="section-title">Overview</h2>
+      <div class="summary-bar" id="summaryBar">
+        <!-- filled by JS -->
       </div>
-      <span class="label">Thomas Jensen</span>
-      <!-- Heroicons: chevron-down -->
-      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="#888" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>
+
+      <div class="members-header">
+        <h2 class="section-title">Members</h2>
+        <div class="bulk-actions">
+          <button class="ghost-btn" id="bulkBtn"></button>
+          <select class="sort-select" id="sortSelect" onchange="setSortMode(this.value)">
+            <option value="alphabetical">Alphabetical order</option>
+            <option value="available">Available for dispatch first</option>
+          </select>
+          <div class="view-toggle">
+            <button type="button" class="view-btn active" id="viewBtnCards" aria-label="Card view" onclick="setView('cards')">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/>
+              </svg>
+            </button>
+            <button type="button" class="view-btn" id="viewBtnTable" aria-label="Table view" onclick="setView('table')">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="members-grid" id="membersGrid">
+        <!-- cards injected by JS -->
+      </div>
+      <div class="sync-footer" id="cardsSyncFooter">
+        <span class="sync-status">Last synced 5 minutes ago</span>
+        <button type="button" class="sync-btn" onclick="syncNow()">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/>
+          </svg>
+          Sync now
+        </button>
+      </div>
+      <div class="members-table-wrap" id="membersTableWrap" hidden>
+        <input type="text" class="table-search" id="tableSearch" placeholder="Find team members" oninput="setSearchQuery(this.value)" />
+        <table class="members-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Active threads</th>
+              <th>Chat threads</th>
+              <th>Voice</th>
+              <th>Auto-dispatch</th>
+            </tr>
+          </thead>
+          <tbody id="membersTableBody">
+            <!-- rows injected by JS -->
+          </tbody>
+        </table>
+        <div class="sync-footer">
+          <span class="sync-status">Last synced 5 minutes ago</span>
+          <button type="button" class="sync-btn" onclick="syncNow()">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/>
+            </svg>
+            Sync now
+          </button>
+        </div>
+      </div>
+    </div>
+    </div>
+    <div class="page-body" id="insightsPage" hidden>
+    <div class="content">
+      <div class="insights-wrap">
+      <h2 class="section-title">Insights</h2>
+      <div class="insights-card">
+        <div class="insights-header">
+          <span class="insights-total">200</span> threads in
+          <select class="insights-select"><option>All threads</option></select>
+          <span class="insights-sep">|</span>
+          Slice
+          <select class="insights-select"><option>Priority</option></select>
+        </div>
+
+        <div class="insights-plot">
+          <div class="insights-gridline" style="top:0%"><span class="glabel">180</span></div>
+          <div class="insights-gridline" style="top:11.11%"><span class="glabel">160</span></div>
+          <div class="insights-gridline" style="top:22.22%"><span class="glabel">140</span></div>
+          <div class="insights-gridline" style="top:33.33%"><span class="glabel">120</span></div>
+          <div class="insights-gridline" style="top:44.44%"><span class="glabel">100</span></div>
+          <div class="insights-gridline" style="top:55.56%"><span class="glabel">80</span></div>
+          <div class="insights-gridline" style="top:66.67%"><span class="glabel">60</span></div>
+          <div class="insights-gridline" style="top:77.78%"><span class="glabel">40</span></div>
+          <div class="insights-gridline" style="top:88.89%"><span class="glabel">20</span></div>
+          <div class="insights-gridline" style="top:100%"><span class="glabel">0</span></div>
+          <div class="insights-bars">
+            <div class="insights-bar-col"><div class="insights-bar" style="height:3.33%;background:#E24B4A"></div></div>
+            <div class="insights-bar-col"><div class="insights-bar" style="height:3.33%;background:#F5A623"></div></div>
+            <div class="insights-bar-col"><div class="insights-bar" style="height:96.67%;background:#F2C94C"></div></div>
+            <div class="insights-bar-col"><div class="insights-bar" style="height:7.78%;background:#59B7EA"></div></div>
+          </div>
+        </div>
+        <div class="insights-xlabels">
+          <div class="insights-bar-col-label">Priority 1…</div>
+          <div class="insights-bar-col-label">Priority 2…</div>
+          <div class="insights-bar-col-label">Priority 3…</div>
+          <div class="insights-bar-col-label">Priority 4…</div>
+        </div>
+
+        <table class="insights-table">
+          <thead>
+            <tr><th>Priority</th><th>Thread count</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="insights-swatch" style="background:#E24B4A"></span>Priority 1 - Emergency Response</td><td>6</td></tr>
+            <tr><td><span class="insights-swatch" style="background:#F5A623"></span>Priority 2 - Quick Response</td><td>6</td></tr>
+            <tr><td><span class="insights-swatch" style="background:#F2C94C"></span>Priority 3 - Normal Response</td><td>174</td></tr>
+            <tr><td><span class="insights-swatch" style="background:#59B7EA"></span>Priority 4 - Scheduled Maintenance</td><td>14</td></tr>
+          </tbody>
+        </table>
+
+        <div class="insights-footnote">Visualizations cover the first page of threads in this view, up to 200, for optimal performance.</div>
+      </div>
+      </div>
+    </div>
+    </div>
+  </main>
+
+  <div class="modal-overlay" id="memberModalOverlay">
+  <div class="member-modal" id="memberModal">
+    <button type="button" class="modal-close" onclick="closeMemberModal()" aria-label="Close">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
       </svg>
-    </div>
+    </button>
 
-    <!-- Admin / Help -->
-    <div class="admin-help-row">
-      <!-- Admin — Heroicons: cog-6-tooth -->
-      <div class="admin-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"/>
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
-        </svg>
-        Admin
+    <div class="modal-header">
+      <div class="modal-avatar-wrap">
+        <img class="modal-avatar" id="modalAvatar" src="" alt="" />
+        <div class="modal-status-dot"></div>
       </div>
-      <!-- Help — Heroicons: question-mark-circle -->
-      <div class="help-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"/>
-        </svg>
-        Help
+      <div>
+        <div class="modal-name" id="modalName"></div>
+        <div class="modal-role" id="modalRole"></div>
       </div>
     </div>
 
+    <div class="modal-tabs">
+      <button type="button" class="modal-tab active" id="modalTabBtnAbout" onclick="setModalTab('about')">About</button>
+      <button type="button" class="modal-tab" id="modalTabBtnThreads" onclick="setModalTab('threads')">Threads</button>
+      <button type="button" class="modal-tab" id="modalTabBtnVoice" onclick="setModalTab('voice')">Voice</button>
+    </div>
+
+    <div class="modal-scroll-area">
+    <div class="modal-tab-panel" id="modalPanelAbout">
+      <div class="modal-card">
+        <div class="modal-info-row">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span id="modalRoleInfo"></span>
+        </div>
+        <div class="modal-info-row">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m6-2a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/>
+          </svg>
+          <span id="modalLocalTime"></span>
+        </div>
+        <div class="modal-info-row">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/>
+          </svg>
+          <a href="#" id="modalEmail" onclick="return false;"></a>
+        </div>
+      </div>
+      <div class="modal-card">
+        <div class="modal-card-title">Dispatch activity</div>
+        <div class="dispatch-log" id="modalDispatchLog"></div>
+      </div>
+    </div>
+
+    <div class="modal-tab-panel" id="modalPanelThreads" hidden>
+      <div class="modal-section-title">Active threads</div>
+      <div class="modal-card">
+        <div class="modal-stat-row">
+          <span style="display: flex; align-items: center; gap: 6px;">
+            Active threads
+            <span class="info-icon-wrap" data-tooltip="Active threads are defined through auto-dispatch configs in Admin">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+              </svg>
+            </span>
+          </span>
+          <span class="modal-stat-value" id="modalThreadsCount"></span>
+        </div>
+        <div class="thread-track" style="margin-bottom: 0;">
+          <div class="thread-fill" id="modalThreadFill"></div>
+          <div class="thread-mask" id="modalThreadMask"></div>
+        </div>
+      </div>
+      <div class="modal-card">
+        <div class="modal-thread-list" id="modalThreadList"></div>
+      </div>
+
+      <div class="modal-section-title">Chat threads</div>
+      <div class="modal-card">
+        <div class="modal-thread-list" id="modalChatThreadList"></div>
+      </div>
+    </div>
+
+    <div class="modal-tab-panel" id="modalPanelVoice" hidden>
+      <div class="modal-card">
+        <table class="modal-calls-table">
+          <tbody id="modalCallsBody"></tbody>
+        </table>
+      </div>
+    </div>
+    </div>
   </div>
-</nav>
+  </div>
+
+</div>
+
+<script>
+  function toggleTeam(el) {
+    el.classList.toggle('expanded');
+  }
+
+  function setPage(page) {
+    document.getElementById('homePage').hidden = page !== 'home';
+    document.getElementById('insightsPage').hidden = page !== 'insights';
+    document.getElementById('pageTabBtnHome').classList.toggle('active', page === 'home');
+    document.getElementById('pageTabBtnInsights').classList.toggle('active', page === 'insights');
+  }
+
+  function randomChatThreads() {
+    return 2 + Math.floor(Math.random() * 29);
+  }
+
+  const members = [
+    { name: 'Amira Hassan',    role: 'Team Admin', available: true,  active: 6, photo: 47, voice: 'idle' },
+    { name: 'Blake Torres',    role: 'Member',     available: false, active: 3, photo: 13, voice: 'idle' },
+    { name: 'Celeste Duval',   role: 'Admin',      available: true,  active: 8, photo: 25, voice: 'in_progress', callSeconds: 767 },
+    { name: 'Dario Bianchi',   role: 'Member',     available: false, active: 0, photo: 33, excluded: true, voice: 'idle' },
+    { name: 'Elena Voss',      role: 'Member',     available: false, active: 5, photo: 44, voice: 'idle' },
+    { name: 'Finn Gallagher',  role: 'Member',     available: false, active: 2, photo: 15, voice: 'idle' },
+    { name: 'Greta Lindqvist', role: 'Member',     available: true,  active: 4, photo: 29, voice: 'idle' },
+    { name: 'Hugo Almeida',    role: 'Member',     available: false, active: 7, photo: 52, voice: 'idle' },
+    { name: 'Ines Moreau',     role: 'Member',     available: false, active: 1, photo: 38, excluded: true, voice: 'idle' },
+    { name: 'Julian Varga',    role: 'Member',     available: true,  active: 9, photo: 60, voice: 'in_progress', callSeconds: 125 },
+    { name: 'Kaya Okonkwo',    role: 'Member',     available: false, active: 3, photo: 65, voice: 'idle' },
+    { name: 'Leo Nakamura',    role: 'Member',     available: false, active: 0, photo: 8, voice: 'idle' },
+  ];
+  members.forEach((m) => { m.chat = randomChatThreads(); });
+
+  const CAPACITY = 10;
+
+  function formatHMS(totalSeconds) {
+    const h = Math.floor(totalSeconds / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${pad(h)}:${pad(m)}:${pad(s)}`;
+  }
+
+  setInterval(() => {
+    members.forEach((m, i) => {
+      if (m.voice === 'in_progress') {
+        m.callSeconds++;
+        const cardEl = document.querySelector(`.member-card[data-index="${i}"] .voice-duration`);
+        if (cardEl) cardEl.textContent = formatHMS(m.callSeconds);
+        const rowEl = document.querySelector(`tr[data-index="${i}"] .voice-duration`);
+        if (rowEl) rowEl.textContent = formatHMS(m.callSeconds);
+      }
+    });
+  }, 1000);
+
+  let sortMode = 'alphabetical';
+
+  let viewMode = 'cards';
+  let searchQuery = '';
+
+  function setSortMode(value) {
+    sortMode = value;
+    renderMembers();
+    renderTable();
+    resizeSortSelect();
+  }
+
+  function setView(mode) {
+    viewMode = mode;
+    document.getElementById('membersGrid').hidden = mode !== 'cards';
+    document.getElementById('cardsSyncFooter').hidden = mode !== 'cards';
+    document.getElementById('membersTableWrap').hidden = mode !== 'table';
+    document.getElementById('viewBtnCards').classList.toggle('active', mode === 'cards');
+    document.getElementById('viewBtnTable').classList.toggle('active', mode === 'table');
+  }
+
+  function setSearchQuery(value) {
+    searchQuery = value;
+    renderTable();
+  }
+
+  function syncNow() {
+    document.querySelectorAll('.sync-status').forEach(el => el.textContent = 'Last synced just now');
+  }
+
+  function resizeSortSelect() {
+    const select = document.getElementById('sortSelect');
+    const selectedText = select.options[select.selectedIndex].text;
+    const span = document.createElement('span');
+    span.style.visibility = 'hidden';
+    span.style.position = 'absolute';
+    span.style.whiteSpace = 'nowrap';
+    span.style.font = getComputedStyle(select).font;
+    span.textContent = selectedText;
+    document.body.appendChild(span);
+    const textWidth = span.getBoundingClientRect().width;
+    document.body.removeChild(span);
+    select.style.width = Math.ceil(textWidth + 40) + 'px';
+  }
+
+  function getSortedMembers() {
+    const indexed = members.map((m, i) => ({ ...m, _i: i }));
+    if (sortMode === 'available') {
+      indexed.sort((a, b) => (b.available - a.available) || a.name.localeCompare(b.name));
+    } else {
+      indexed.sort((a, b) => a.name.localeCompare(b.name));
+    }
+    return indexed;
+  }
+
+  function renderSummary() {
+    const available = members.filter(m => m.available).length;
+    const activeThreads = members.reduce((sum, m) => sum + m.active, 0);
+    const callsInProgress = members.filter(m => m.voice === 'in_progress').length;
+    const icons = {
+      user: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+      tag: '<path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z"/><line x1="7" y1="7" x2="7.01" y2="7"/>',
+      checkCircle: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
+      phone: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92Z"/>',
+    };
+    const summaryIcon = (name) => `<div class="summary-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icons[name]}</svg></div>`;
+    document.getElementById('summaryBar').innerHTML = `
+      <div class="summary-block"><div class="summary-top"><span class="num">${members.length}</span>${summaryIcon('user')}</div><span class="lbl">team members</span></div>
+      <div class="summary-block"><div class="summary-top"><span class="num">${available}</span>${summaryIcon('tag')}</div><span class="lbl">available for dispatch</span></div>
+      <div class="summary-block"><div class="summary-top"><span class="num">${activeThreads}</span>${summaryIcon('checkCircle')}</div><span class="lbl">total active threads</span></div>
+      <div class="summary-block"><div class="summary-top"><span class="num">${callsInProgress}</span>${summaryIcon('phone')}</div><span class="lbl">calls in progress</span></div>
+    `;
+  }
+
+  function renderMembers() {
+    const grid = document.getElementById('membersGrid');
+    grid.innerHTML = getSortedMembers().map((m) => `
+      <div class="member-card ${m.available ? 'available' : ''}" data-index="${m._i}">
+        <div class="glow-top"></div>
+        <div class="member-head">
+          <div class="avatar-wrap"><img class="avatar" src="https://i.pravatar.cc/150?img=${m.photo}" alt="${m.name}" /><div class="status-dot"></div></div>
+          <div class="member-info">
+            <span class="member-name">${m.name}</span>
+            <span class="member-role">${m.role}</span>
+          </div>
+        </div>
+        <div class="threads-row">
+          <div class="thread-label" onclick="openMemberModal(${m._i}, 'threads')"><span>Active threads</span><span class="count">${m.active} / ${CAPACITY}</span></div>
+          <div class="thread-track"><div class="thread-fill"></div><div class="thread-mask" style="width:${100 - (m.active / CAPACITY) * 100}%;"></div></div>
+        </div>
+        <div class="chat-row" onclick="openMemberModal(${m._i}, 'threads')">
+          <span>Chat threads</span>
+          <span class="count">${m.chat}</span>
+        </div>
+        <div class="voice-row" onclick="openMemberModal(${m._i}, 'voice')">
+          <span>Voice</span>
+          <span class="voice-pill badge-20 ${m.voice === 'in_progress' ? 'in-progress' : 'idle'}">${m.voice === 'in_progress' ? `Call in progress (<span class="voice-duration">${formatHMS(m.callSeconds)}</span>)` : 'Idle'}</span>
+        </div>
+        <div class="dispatch-row">
+          <span class="dispatch-label ${m.excluded ? 'excluded' : ''}">Available for dispatch</span>
+          ${m.excluded
+            ? `<div class="tooltip-wrap" data-tooltip="Excluded from dispatch"><button type="button" class="toggle" role="switch" aria-checked="false" data-state="unchecked" disabled></button></div>`
+            : `<button type="button" class="toggle" role="switch" aria-checked="${m.available}" data-state="${m.available ? 'checked' : 'unchecked'}" onclick="flip(${m._i})"></button>`
+          }
+        </div>
+      </div>
+    `).join('');
+  }
+
+  const ROLE_CLASS = { 'Admin': 'role-admin', 'Team Admin': 'role-team-admin', 'Member': 'role-member' };
+
+  function renderTable() {
+    const tbody = document.getElementById('membersTableBody');
+    const q = searchQuery.trim().toLowerCase();
+    const rows = getSortedMembers().filter(m => !q || m.name.toLowerCase().includes(q));
+    tbody.innerHTML = rows.map((m) => `
+      <tr class="row-clickable ${m.available ? 'available' : ''}" data-index="${m._i}" onclick="openMemberModal(${m._i}, 'threads')">
+        <td>
+          <div class="row-name">
+            <div class="row-avatar-wrap"><img class="row-avatar" src="https://i.pravatar.cc/150?img=${m.photo}" alt="${m.name}" /><div class="row-status-dot"></div></div>
+            <span>${m.name}</span>
+          </div>
+        </td>
+        <td><span class="role-pill ${ROLE_CLASS[m.role] || 'role-member'}">${m.role}</span></td>
+        <td class="threads-cell ${m.active > CAPACITY ? 'over' : ''}">${m.active} / ${CAPACITY}</td>
+        <td>${m.chat}</td>
+        <td><span class="voice-pill badge-20 ${m.voice === 'in_progress' ? 'in-progress' : 'idle'}">${m.voice === 'in_progress' ? `Call in progress (<span class="voice-duration">${formatHMS(m.callSeconds)}</span>)` : 'Idle'}</span></td>
+        <td onclick="event.stopPropagation()">
+          ${m.excluded
+            ? `<div class="tooltip-wrap" data-tooltip="Excluded from dispatch"><button type="button" class="toggle" role="switch" aria-checked="false" data-state="unchecked" disabled></button></div>`
+            : `<button type="button" class="toggle" role="switch" aria-checked="${m.available}" data-state="${m.available ? 'checked' : 'unchecked'}" onclick="flip(${m._i})"></button>`
+          }
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function applyCardState(i) {
+    const m = members[i];
+    const card = document.querySelector(`.member-card[data-index="${i}"]`);
+    if (card) {
+      card.classList.toggle('available', m.available);
+      const toggle = card.querySelector('.toggle');
+      if (toggle && !toggle.disabled) {
+        toggle.setAttribute('data-state', m.available ? 'checked' : 'unchecked');
+        toggle.setAttribute('aria-checked', String(m.available));
+      }
+    }
+    const row = document.querySelector(`tr[data-index="${i}"]`);
+    if (row) {
+      row.classList.toggle('available', m.available);
+      const rowToggle = row.querySelector('.toggle');
+      if (rowToggle && !rowToggle.disabled) {
+        rowToggle.setAttribute('data-state', m.available ? 'checked' : 'unchecked');
+        rowToggle.setAttribute('aria-checked', String(m.available));
+      }
+    }
+    if (modalMemberIndex === i) renderModal();
+  }
+
+  let modalMemberIndex = null;
+  let modalActiveTab = 'about';
+
+  function memberEmail(name) {
+    return name.toLowerCase().replace(/[^a-z\s]/g, '').trim().split(/\s+/).join('.') + '@acme.com';
+  }
+
+  const PRIORITIES = [
+    { label: 'Low', color: '#B3B2B8' },
+    { label: 'Medium', color: '#F5A623' },
+    { label: 'High', color: '#0C7DE0' },
+    { label: 'Urgent', color: '#E24B4A' },
+  ];
+  const CLIENTS = ['Yellow Systems', 'Sushi Corp', 'BSMClient', 'PartyParrot', 'Acme Robotics', 'Nimbus Health', 'Cobalt Freight', 'Vesper Labs'];
+  const CONTACTS = [
+    { name: 'Nicole Riemer', bg: '#E1F5EE', color: '#00805F' },
+    { name: 'Mace Windu', bg: '#FBE4E1', color: '#B2402F' },
+    { name: 'John Machone', bg: '#FCEEDB', color: '#9A6600' },
+    { name: 'Michael Cala', bg: '#E6F1FB', color: '#0C447C' },
+    { name: 'Mark Alayev', bg: '#EDEAFE', color: '#5B4FCF' },
+    { name: 'Priya Patel', bg: '#FCE8F1', color: '#B23A78' },
+    { name: 'Sam Osei', bg: '#E1F5EE', color: '#00805F' },
+    { name: 'Elena Cho', bg: '#E6F1FB', color: '#0C447C' },
+  ];
+  const SUMMARY_TEMPLATES = [
+    (first) => `${first}'s VPN is down.`,
+    (first) => `Password Reset Request – ${first}`,
+    (first) => `User Offboarding | ${first}'s account`,
+    (first) => `New call from ${first}`,
+    (first) => `Keyboard Issues – ${first}'s Device`,
+    () => 'Billing discrepancy on latest invoice',
+    (first) => `${first} can't access shared drive`,
+    () => 'Onboarding checklist follow-up',
+    (first) => `${first} reports slow VPN connection`,
+    () => 'Printer offline in main office',
+  ];
+
+  function threadInitials(name) {
+    return name.split(/\s+/).map((p) => p[0]).join('').slice(0, 2).toUpperCase();
+  }
+
+  function formatThreadDate(dayOffset) {
+    const d = new Date();
+    d.setDate(d.getDate() - dayOffset);
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  }
+
+  function generateThreads(length, idStart) {
+    return Array.from({ length }, (_, idx) => {
+      const contact = CONTACTS[Math.floor(Math.random() * CONTACTS.length)];
+      const summaryFn = SUMMARY_TEMPLATES[Math.floor(Math.random() * SUMMARY_TEMPLATES.length)];
+      return {
+        id: `#${idStart + idx}`,
+        status: Math.random() < 0.5 ? 'Assigned' : 'In progress',
+        priority: PRIORITIES[Math.floor(Math.random() * PRIORITIES.length)],
+        client: CLIENTS[Math.floor(Math.random() * CLIENTS.length)],
+        contact,
+        board: 'Help Desk',
+        createdDayOffset: Math.floor(Math.random() * 10),
+        summary: summaryFn(contact.name.split(' ')[0]),
+      };
+    });
+  }
+
+  function getMemberThreads(m) {
+    if (!m._threads) m._threads = generateThreads(m.active, 1200);
+    return m._threads;
+  }
+
+  function getMemberChatThreads(m) {
+    if (!m._chatThreads) m._chatThreads = generateThreads(m.chat, 3000);
+    return m._chatThreads;
+  }
+
+  function renderThreadRows(threads, emptyText) {
+    return threads.length
+      ? threads.map((t) => `
+          <div class="modal-thread-row">
+            <div class="modal-thread-top">
+              <span class="thread-priority-dot meta-tooltip" data-tooltip="Priority" style="background:${t.priority.color}"></span>
+              <span class="modal-thread-id">${t.id}</span>
+              <span class="status-pill status-${t.status === 'In progress' ? 'in-progress' : 'assigned'}">${t.status}</span>
+            </div>
+            <div class="modal-thread-summary">${t.summary}</div>
+            <div class="modal-thread-meta">
+              <span class="modal-thread-contact meta-tooltip" data-tooltip="Contact">
+                <span class="thread-contact-avatar" style="background:${t.contact.bg};color:${t.contact.color}">${threadInitials(t.contact.name)}</span>
+                ${t.contact.name}
+              </span>
+              <span class="meta-dot">·</span>
+              <span class="meta-tooltip" data-tooltip="Client">${t.client}</span>
+              <span class="meta-dot">·</span>
+              <span class="meta-tooltip" data-tooltip="Board">${t.board}</span>
+              <span class="meta-dot">·</span>
+              <span class="meta-tooltip" data-tooltip="Created date">${formatThreadDate(t.createdDayOffset)}</span>
+            </div>
+          </div>
+        `).join('')
+      : `<div class="modal-thread-row modal-thread-empty"><span>${emptyText}</span></div>`;
+  }
+
+  function formatCallDuration(totalSeconds) {
+    const h = Math.floor(totalSeconds / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+    if (h > 0) return `${h}h ${String(m).padStart(2, '0')}m ${String(s).padStart(2, '0')}s`;
+    if (m > 0) return `${m}m ${String(s).padStart(2, '0')}s`;
+    return `${s}s`;
+  }
+
+  function formatCallDate(dayOffset) {
+    if (dayOffset === 0) return 'Today';
+    if (dayOffset === 1) return 'Yesterday';
+    const d = new Date();
+    d.setDate(d.getDate() - dayOffset);
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  }
+
+  function getMemberCalls(m) {
+    if (!m._calls) {
+      m._calls = [];
+      [0, 1, 2].forEach((dayOffset) => {
+        const count = dayOffset === 0 ? 1 + Math.floor(Math.random() * 3) : Math.floor(Math.random() * 3);
+        for (let i = 0; i < count; i++) {
+          const hour = 8 + Math.floor(Math.random() * 9);
+          const minute = Math.floor(Math.random() * 60);
+          const ampm = hour >= 12 ? 'PM' : 'AM';
+          const hour12 = ((hour + 11) % 12) + 1;
+          const durationSeconds = Math.random() < 0.1
+            ? 3600 + Math.floor(Math.random() * 1800)
+            : Math.floor(Math.random() * 720);
+          m._calls.push({
+            dayOffset,
+            time: `${hour12}:${String(minute).padStart(2, '0')} ${ampm}`,
+            direction: Math.random() < 0.5 ? 'Inbound' : 'Outbound',
+            duration: durationSeconds,
+          });
+        }
+      });
+    }
+    return m._calls;
+  }
+
+  function getMemberDispatchLog(m) {
+    if (!m._dispatchLog) {
+      const actorPool = ['You', m.name, 'System'];
+      let state = m.available;
+      let dayOffset = 0;
+      m._dispatchLog = Array.from({ length: 5 }, () => {
+        const hour = 7 + Math.floor(Math.random() * 14);
+        const minute = Math.floor(Math.random() * 60);
+        const entry = {
+          on: state,
+          actor: actorPool[Math.floor(Math.random() * actorPool.length)],
+          dayOffset,
+          hour,
+          minute,
+        };
+        state = !state;
+        dayOffset += 1 + Math.floor(Math.random() * 2);
+        return entry;
+      });
+    }
+    return m._dispatchLog;
+  }
+
+  function formatDispatchTimestamp(entry) {
+    let day;
+    if (entry.dayOffset === 0) day = 'Today';
+    else if (entry.dayOffset === 1) day = 'Yesterday';
+    else {
+      const d = new Date();
+      d.setDate(d.getDate() - entry.dayOffset);
+      day = d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    }
+    const ampm = entry.hour >= 12 ? 'PM' : 'AM';
+    const hour12 = ((entry.hour + 11) % 12) + 1;
+    return `${day}, ${hour12}:${String(entry.minute).padStart(2, '0')} ${ampm}`;
+  }
+
+  function setModalTab(tab) {
+    modalActiveTab = tab;
+    ['about', 'threads', 'voice'].forEach((t) => {
+      document.getElementById(`modalTabBtn${t.charAt(0).toUpperCase()}${t.slice(1)}`).classList.toggle('active', t === tab);
+      document.getElementById(`modalPanel${t.charAt(0).toUpperCase()}${t.slice(1)}`).hidden = t !== tab;
+    });
+  }
+
+  function renderModal() {
+    const m = members[modalMemberIndex];
+    const modal = document.getElementById('memberModal');
+    modal.classList.toggle('available', m.available);
+    document.getElementById('modalAvatar').src = `https://i.pravatar.cc/150?img=${m.photo}`;
+    document.getElementById('modalAvatar').alt = m.name;
+    document.getElementById('modalName').textContent = m.name;
+    document.getElementById('modalRole').textContent = m.role;
+    document.getElementById('modalRoleInfo').textContent = m.role;
+    document.getElementById('modalThreadsCount').textContent = `${m.active} / ${CAPACITY}`;
+    document.getElementById('modalThreadMask').style.width = `${100 - (m.active / CAPACITY) * 100}%`;
+    document.getElementById('modalLocalTime').textContent =
+      new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + ' local time';
+    const emailLink = document.getElementById('modalEmail');
+    emailLink.textContent = memberEmail(m.name);
+
+    const dispatchLogEl = document.getElementById('modalDispatchLog');
+    dispatchLogEl.innerHTML = getMemberDispatchLog(m).map((entry) => `
+      <div class="dispatch-log-row">
+        <span class="dispatch-log-dot ${entry.on ? 'on' : ''}"></span>
+        <span class="dispatch-log-text">Turned <strong>${entry.on ? 'on' : 'off'}</strong> by ${entry.actor}</span>
+        <span class="dispatch-log-time">${formatDispatchTimestamp(entry)}</span>
+      </div>
+    `).join('');
+
+    document.getElementById('modalThreadList').innerHTML = renderThreadRows(getMemberThreads(m), 'No active threads');
+    document.getElementById('modalChatThreadList').innerHTML = renderThreadRows(getMemberChatThreads(m), 'No chat threads');
+
+    const callsBody = document.getElementById('modalCallsBody');
+    const calls = getMemberCalls(m);
+    const dayOffsets = [...new Set(calls.map((c) => c.dayOffset))].sort((a, b) => a - b);
+    callsBody.innerHTML = dayOffsets.length
+      ? dayOffsets.map((offset) => `
+          <tr class="modal-date-row"><td colspan="3">${formatCallDate(offset)}</td></tr>
+          ${calls.filter((c) => c.dayOffset === offset).map((c) => `
+            <tr><td>${c.time}</td><td>${c.direction}</td><td>${formatCallDuration(c.duration)}</td></tr>
+          `).join('')}
+        `).join('')
+      : `<tr><td colspan="3">No calls today</td></tr>`;
+  }
+
+  function openMemberModal(i, tab) {
+    modalMemberIndex = i;
+    renderModal();
+    setModalTab(tab || 'about');
+    document.getElementById('memberModalOverlay').classList.add('open');
+  }
+
+  function closeMemberModal() {
+    document.getElementById('memberModalOverlay').classList.remove('open');
+    modalMemberIndex = null;
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modalMemberIndex !== null) closeMemberModal();
+  });
+
+  function flip(i) {
+    members[i].available = !members[i].available;
+    applyCardState(i);
+    renderSummary();
+    renderBulkAction();
+  }
+
+  function setAllDispatch(value) {
+    members.forEach((m, i) => {
+      if (!m.excluded) {
+        m.available = value;
+        applyCardState(i);
+      }
+    });
+    renderSummary();
+    renderBulkAction();
+  }
+
+  function renderBulkAction() {
+    const eligible = members.filter(m => !m.excluded);
+    const allOn = eligible.every(m => m.available);
+    const btn = document.getElementById('bulkBtn');
+    btn.textContent = allOn ? 'Set all unavailable' : 'Set all available';
+    btn.onclick = () => setAllDispatch(!allOn);
+  }
+
+  renderMembers();
+  renderTable();
+  renderSummary();
+  renderBulkAction();
+  resizeSortSelect();
+</script>
 </body>
 </html>

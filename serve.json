@@ -1,5 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/", "destination": "/team-dispatch-side-panel.html" }
-  ]
-}
