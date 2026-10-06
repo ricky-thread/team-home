@@ -442,9 +442,9 @@
   .avail-info:focus-visible { outline: 2px solid #00BB99; outline-offset: 1px; }
   .avail-tip {
     position: absolute; bottom: calc(100% + 8px); right: -6px; transform: translateY(2px);
-    width: 232px; padding: 9px 11px; border-radius: 8px;
+    padding: 6px 10px; border-radius: 8px;
     background: #161618; color: #fff; text-align: left;
-    font-size: 12px; line-height: 1.4; font-weight: 400; white-space: normal;
+    font-size: 12px; line-height: 1.4; font-weight: 500; white-space: nowrap;
     box-shadow: 0 4px 12px rgba(0,0,0,0.18);
     opacity: 0; visibility: hidden; pointer-events: none;
     transition: opacity 0.12s ease, transform 0.12s ease, visibility 0.12s;
@@ -454,8 +454,6 @@
     content: ''; position: absolute; top: 100%; right: 11px;
     border: 5px solid transparent; border-top-color: #161618;
   }
-  .avail-tip b { display: block; font-weight: 600; margin-bottom: 2px; }
-  .avail-tip span { color: rgba(255,255,255,0.72); }
   .avail-info:hover .avail-tip, .avail-info:focus-visible .avail-tip {
     opacity: 1; visibility: visible; transform: translateY(0);
   }
@@ -1321,14 +1319,9 @@
 
   function availInfo(m) {
     const kind = m.excluded ? 'excluded' : m.manual ? 'manual' : 'schedule';
-    const body = {
-      schedule: 'Turns on and off automatically with their work hours.',
-      manual: 'Overrides the work schedule until then.',
-      excluded: 'Skipped when auto-dispatch assigns threads.',
-    }[kind];
     return `<button type="button" class="avail-info" data-kind="${kind}" aria-label="${dispatchHint(m)}">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${AVAIL_ICONS[kind]}</svg>
-      <span class="avail-tip" role="tooltip"><b>${dispatchHint(m)}</b><span>${body}</span></span>
+      <span class="avail-tip" role="tooltip">${dispatchHint(m)}</span>
     </button>`;
   }
 
