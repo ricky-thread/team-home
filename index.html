@@ -277,19 +277,22 @@
     border-radius: 12px;
     padding: 16px 18px;
     display: flex;
-    flex-direction: column;
-    gap: 4px;
+    align-items: center;
+    gap: 14px;
     box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.18);
   }
-  .summary-top { display: flex; align-items: center; justify-content: space-between; }
   .summary-icon {
-    width: 20px; height: 20px;
-    color: #605F68;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: #F6F5F2;
+    color: #A3A2AA;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
+    font-size: 20px;
   }
   .summary-icon svg { width: 20px; height: 20px; }
-  .summary-block .num { font-size: 22px; font-weight: 600; color: #161618; }
+  .summary-text { display: flex; flex-direction: column; gap: 2px; }
+  .summary-block .num { font-size: 22px; font-weight: 600; color: #161618; line-height: 1.2; }
   .summary-block .lbl { font-size: 13px; color: #7E7D86; }
 
   h2.section-title {
@@ -319,22 +322,6 @@
   }
   .ghost-btn:hover { background: rgba(0,187,153,0.08); }
 
-  .sort-select {
-    background: #fff;
-    border: 1px solid #ece6d8;
-    color: #605F68;
-    font-size: 12.5px;
-    font-weight: 600;
-    padding: 6px 28px 6px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 24 24' stroke='%23999' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-  }
-  .sort-select:hover { border-color: #d8d0bf; }
 
   .members-grid {
     display: grid;
@@ -442,12 +429,46 @@
   .voice-pill.in-progress { background: #E6FAF6; color: #00967A; }
   .voice-pill.idle { background: #FAF9F6; color: #5F5E5A; }
 
+  .dispatch-cell { display: flex; align-items: center; gap: 8px; }
+  .avail-info {
+    all: unset; box-sizing: border-box;
+    position: relative; display: inline-flex; align-items: center; justify-content: center;
+    width: 20px; height: 20px; border-radius: 6px;
+    color: #A3A2AA; cursor: help;
+    transition: color 0.15s, background 0.15s;
+  }
+  .avail-info svg { width: 14px; height: 14px; }
+  .avail-info:hover, .avail-info:focus-visible { color: #161618; background: rgba(0,0,0,0.05); }
+  .avail-info:focus-visible { outline: 2px solid #00BB99; outline-offset: 1px; }
+  .avail-tip {
+    position: absolute; bottom: calc(100% + 8px); right: -6px; transform: translateY(2px);
+    width: 232px; padding: 9px 11px; border-radius: 8px;
+    background: #161618; color: #fff; text-align: left;
+    font-size: 12px; line-height: 1.4; font-weight: 400; white-space: normal;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity 0.12s ease, transform 0.12s ease, visibility 0.12s;
+    z-index: 30;
+  }
+  .avail-tip::after {
+    content: ''; position: absolute; top: 100%; right: 11px;
+    border: 5px solid transparent; border-top-color: #161618;
+  }
+  .avail-tip b { display: block; font-weight: 600; margin-bottom: 2px; }
+  .avail-tip span { color: rgba(255,255,255,0.72); }
+  .avail-info:hover .avail-tip, .avail-info:focus-visible .avail-tip {
+    opacity: 1; visibility: visible; transform: translateY(0);
+  }
+
+  .card-divider { height: 1px; background: #DAD9DD; margin-top: 4px; }
+
   .dispatch-row {
     display: flex; align-items: center; justify-content: space-between;
     position: relative;
     margin: -8px -8px 0; padding: 6px 8px;
   }
-  .dispatch-label { font-size: 13px; font-weight: 400; color: #605F68; }
+  .dispatch-hint { font-size: 12px; line-height: 1.4; color: #7E7D86; margin-top: -14px; }
+  .dispatch-label { font-size: 13px; font-weight: 400; color: #161618; }
 
   .toggle {
     all: unset;
@@ -490,7 +511,7 @@
     pointer-events: none;
   }
 
-  .dispatch-label.excluded { color: #7E7D86; }
+  .dispatch-label.excluded { color: #161618; }
 
   .info-icon-wrap { position: relative; display: inline-flex; cursor: help; }
   .info-icon-wrap svg { width: 14px; height: 14px; color: #7E7D86; }
@@ -562,7 +583,7 @@
   }
   .member-modal.available .modal-status-dot { background: #219653; }
   .modal-name { font-size: 17px; font-weight: 700; color: #161618; }
-  .modal-role { font-size: 13px; color: #7E7D86; margin-top: 2px; }
+  .modal-role { font-size: 13px; color: #7E7D86; margin-top: -14px; }
 
 
   .modal-stat-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; color: #605F68; margin-bottom: 8px; }
@@ -968,10 +989,6 @@
         <h2 class="section-title">Members</h2>
         <div class="bulk-actions">
           <button class="ghost-btn" id="bulkBtn"></button>
-          <select class="sort-select" id="sortSelect" onchange="setSortMode(this.value)">
-            <option value="alphabetical">Alphabetical order</option>
-            <option value="available">Available for dispatch first</option>
-          </select>
           <div class="view-toggle">
             <button type="button" class="view-btn active" id="viewBtnCards" aria-label="Card view" onclick="setView('cards')">
               <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
@@ -1197,13 +1214,13 @@
 
   const members = [
     { name: 'Amira Hassan',    role: 'Team Admin', available: true,  active: 6, photo: 47, voice: 'idle' },
-    { name: 'Blake Torres',    role: 'Member',     available: false, active: 3, photo: 13, voice: 'idle' },
+    { name: 'Blake Torres',    role: 'Member',     available: false, manual: true, active: 3, photo: 13, voice: 'idle' },
     { name: 'Celeste Duval',   role: 'Admin',      available: true,  active: 8, photo: 25, voice: 'in_progress', callSeconds: 767 },
     { name: 'Dario Bianchi',   role: 'Member',     available: false, active: 0, photo: 33, excluded: true, voice: 'idle' },
     { name: 'Elena Voss',      role: 'Member',     available: false, active: 5, photo: 44, voice: 'idle' },
     { name: 'Finn Gallagher',  role: 'Member',     available: false, active: 2, photo: 15, voice: 'idle' },
-    { name: 'Greta Lindqvist', role: 'Member',     available: true,  active: 4, photo: 29, voice: 'idle' },
-    { name: 'Hugo Almeida',    role: 'Member',     available: false, active: 7, photo: 52, voice: 'idle' },
+    { name: 'Greta Lindqvist', role: 'Member',     available: true,  manual: true,  active: 4, photo: 29, voice: 'idle' },
+    { name: 'Hugo Almeida',    role: 'Member',     available: false, manual: true, resumeLabel: 'Tuesday', active: 7, photo: 52, voice: 'idle' },
     { name: 'Ines Moreau',     role: 'Member',     available: false, active: 1, photo: 38, excluded: true, voice: 'idle' },
     { name: 'Julian Varga',    role: 'Member',     available: true,  active: 9, photo: 60, voice: 'in_progress', callSeconds: 125 },
     { name: 'Kaya Okonkwo',    role: 'Member',     available: false, active: 3, photo: 65, voice: 'idle' },
@@ -1233,17 +1250,9 @@
     });
   }, 1000);
 
-  let sortMode = 'alphabetical';
 
   let viewMode = 'cards';
   let searchQuery = '';
-
-  function setSortMode(value) {
-    sortMode = value;
-    renderMembers();
-    renderTable();
-    resizeSortSelect();
-  }
 
   function setView(mode) {
     viewMode = mode;
@@ -1263,48 +1272,64 @@
     document.querySelectorAll('.sync-status').forEach(el => el.textContent = 'Last synced just now');
   }
 
-  function resizeSortSelect() {
-    const select = document.getElementById('sortSelect');
-    const selectedText = select.options[select.selectedIndex].text;
-    const span = document.createElement('span');
-    span.style.visibility = 'hidden';
-    span.style.position = 'absolute';
-    span.style.whiteSpace = 'nowrap';
-    span.style.font = getComputedStyle(select).font;
-    span.textContent = selectedText;
-    document.body.appendChild(span);
-    const textWidth = span.getBoundingClientRect().width;
-    document.body.removeChild(span);
-    select.style.width = Math.ceil(textWidth + 40) + 'px';
-  }
-
   function getSortedMembers() {
     const indexed = members.map((m, i) => ({ ...m, _i: i }));
-    if (sortMode === 'available') {
-      indexed.sort((a, b) => (b.available - a.available) || a.name.localeCompare(b.name));
-    } else {
-      indexed.sort((a, b) => a.name.localeCompare(b.name));
-    }
+    indexed.sort((a, b) => a.name.localeCompare(b.name));
     return indexed;
   }
 
   function renderSummary() {
     const available = members.filter(m => m.available).length;
-    const activeThreads = members.reduce((sum, m) => sum + m.active, 0);
-    const callsInProgress = members.filter(m => m.voice === 'in_progress').length;
-    const icons = {
-      user: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
-      tag: '<path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z"/><line x1="7" y1="7" x2="7.01" y2="7"/>',
-      checkCircle: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
-      phone: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92Z"/>',
-    };
-    const summaryIcon = (name) => `<div class="summary-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icons[name]}</svg></div>`;
-    document.getElementById('summaryBar').innerHTML = `
-      <div class="summary-block"><div class="summary-top"><span class="num">${members.length}</span>${summaryIcon('user')}</div><span class="lbl">team members</span></div>
-      <div class="summary-block"><div class="summary-top"><span class="num">${available}</span>${summaryIcon('tag')}</div><span class="lbl">available for dispatch</span></div>
-      <div class="summary-block"><div class="summary-top"><span class="num">${activeThreads}</span>${summaryIcon('checkCircle')}</div><span class="lbl">total active threads</span></div>
-      <div class="summary-block"><div class="summary-top"><span class="num">${callsInProgress}</span>${summaryIcon('phone')}</div><span class="lbl">calls in progress</span></div>
-    `;
+    const liveChats = members.reduce((sum, m) => sum + m.chat, 0);
+    const chatIcon = '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01" stroke-width="2.4"/></svg>';
+    const tile = (icon, num, label) => `<div class="summary-block"><div class="summary-icon">${icon}</div><div class="summary-text"><span class="num">${num}</span><span class="lbl">${label}</span></div></div>`;
+    document.getElementById('summaryBar').innerHTML =
+      tile('🛡️', members.length, 'Team members') +
+      tile('🤖', available, 'Available for dispatch') +
+      tile(chatIcon, liveChats, 'Live chats');
+  }
+
+  // Prototype work schedule: Mon-Fri, 8:00 AM start (hours come from Work schedules in production)
+  const WORK_SCHEDULE = { days: [1, 2, 3, 4, 5], startHour: 8 };
+  const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const SCHEDULE_START_LABEL = `${WORK_SCHEDULE.startHour}:00 AM`;
+
+  function nextScheduleStartLabel(now = new Date()) {
+    for (let d = 0; d < 8; d++) {
+      const start = new Date(now);
+      start.setDate(now.getDate() + d);
+      start.setHours(WORK_SCHEDULE.startHour, 0, 0, 0);
+      if (WORK_SCHEDULE.days.includes(start.getDay()) && start > now) {
+        return d === 0 ? 'today' : d === 1 ? 'tomorrow' : DAY_NAMES[start.getDay()];
+      }
+    }
+    return 'tomorrow';
+  }
+
+  function dispatchHint(m) {
+    if (m.excluded) return 'Excluded from dispatch';
+    if (!m.manual) return 'Set by work schedule';
+    if (m.available) return `Set manually until tomorrow at ${SCHEDULE_START_LABEL}`;
+    return `Set manually until ${m.resumeLabel || nextScheduleStartLabel()} at ${SCHEDULE_START_LABEL}`;
+  }
+
+  const AVAIL_ICONS = {
+    schedule: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+    manual: '<path d="M4.04 4.69a.5.5 0 0 1 .65-.65l16 6.5a.5.5 0 0 1-.06.95l-6.13 1.58a2 2 0 0 0-1.44 1.43l-1.58 6.13a.5.5 0 0 1-.95.06z"/>',
+    excluded: '<circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/>',
+  };
+
+  function availInfo(m) {
+    const kind = m.excluded ? 'excluded' : m.manual ? 'manual' : 'schedule';
+    const body = {
+      schedule: 'Turns on and off automatically with their work hours.',
+      manual: 'Overrides the work schedule until then.',
+      excluded: 'Skipped when auto-dispatch assigns threads.',
+    }[kind];
+    return `<button type="button" class="avail-info" data-kind="${kind}" aria-label="${dispatchHint(m)}">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${AVAIL_ICONS[kind]}</svg>
+      <span class="avail-tip" role="tooltip"><b>${dispatchHint(m)}</b><span>${body}</span></span>
+    </button>`;
   }
 
   function renderMembers() {
@@ -1331,6 +1356,7 @@
           <span>Voice</span>
           <span class="voice-pill badge-20 ${m.voice === 'in_progress' ? 'in-progress' : 'idle'}">${m.voice === 'in_progress' ? `Call in progress (<span class="voice-duration">${formatHMS(m.callSeconds)}</span>)` : 'Idle'}</span>
         </div>
+        <div class="card-divider"></div>
         <div class="dispatch-row">
           <span class="dispatch-label ${m.excluded ? 'excluded' : ''}">Available for dispatch</span>
           ${m.excluded
@@ -1338,6 +1364,7 @@
             : `<button type="button" class="toggle" role="switch" aria-checked="${m.available}" data-state="${m.available ? 'checked' : 'unchecked'}" onclick="flip(${m._i})"></button>`
           }
         </div>
+        <div class="dispatch-hint">${dispatchHint(m)}</div>
       </div>
     `).join('');
   }
@@ -1361,10 +1388,13 @@
         <td>${m.chat}</td>
         <td><span class="voice-pill badge-20 ${m.voice === 'in_progress' ? 'in-progress' : 'idle'}">${m.voice === 'in_progress' ? `Call in progress (<span class="voice-duration">${formatHMS(m.callSeconds)}</span>)` : 'Idle'}</span></td>
         <td onclick="event.stopPropagation()">
-          ${m.excluded
-            ? `<div class="tooltip-wrap" data-tooltip="Excluded from dispatch"><button type="button" class="toggle" role="switch" aria-checked="false" data-state="unchecked" disabled></button></div>`
-            : `<button type="button" class="toggle" role="switch" aria-checked="${m.available}" data-state="${m.available ? 'checked' : 'unchecked'}" onclick="flip(${m._i})"></button>`
-          }
+          <div class="dispatch-cell">
+            ${m.excluded
+              ? `<button type="button" class="toggle" role="switch" aria-checked="false" data-state="unchecked" disabled></button>`
+              : `<button type="button" class="toggle" role="switch" aria-checked="${m.available}" data-state="${m.available ? 'checked' : 'unchecked'}" onclick="flip(${m._i})"></button>`
+            }
+            ${availInfo(m)}
+          </div>
         </td>
       </tr>
     `).join('');
@@ -1380,6 +1410,8 @@
         toggle.setAttribute('data-state', m.available ? 'checked' : 'unchecked');
         toggle.setAttribute('aria-checked', String(m.available));
       }
+      const hint = card.querySelector('.dispatch-hint');
+      if (hint) hint.textContent = dispatchHint(m);
     }
     const row = document.querySelector(`tr[data-index="${i}"]`);
     if (row) {
@@ -1389,6 +1421,8 @@
         rowToggle.setAttribute('data-state', m.available ? 'checked' : 'unchecked');
         rowToggle.setAttribute('aria-checked', String(m.available));
       }
+      const rowInfo = row.querySelector('.avail-info');
+      if (rowInfo) rowInfo.outerHTML = availInfo(m);
     }
     if (modalMemberIndex === i) renderModal();
   }
@@ -1640,6 +1674,8 @@
 
   function flip(i) {
     members[i].available = !members[i].available;
+    members[i].manual = true;
+    delete members[i].resumeLabel;
     applyCardState(i);
     renderSummary();
     renderBulkAction();
@@ -1649,6 +1685,8 @@
     members.forEach((m, i) => {
       if (!m.excluded) {
         m.available = value;
+        m.manual = true;
+        delete m.resumeLabel;
         applyCardState(i);
       }
     });
@@ -1668,7 +1706,6 @@
   renderTable();
   renderSummary();
   renderBulkAction();
-  resizeSortSelect();
 </script>
 </body>
 </html>
